@@ -4,13 +4,13 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.Application
-import com.car.l.screens.MovementTestScreen
+import com.car.l.screens.LevelTestScreen
 import com.car.l.screens.AbstractScreen
 import com.car.l.screens.SplashScreen
 import com.car.l.screens.TransitionScreen
 
 class LudumGame extends Game {
-  lazy val testScreen = new MovementTestScreen(this)
+  lazy val testScreen = new LevelTestScreen(this)
   lazy val transitionScreen = new TransitionScreen(this)
   var currentScreen: Option[AbstractScreen] = None
 

@@ -18,8 +18,12 @@ abstract class Entity(animations: Map[String, Animation]) extends Actor {
     animationTimer += delta
   }
   
+  def swapAnimation(anim: String) {
+    animationTimer = 0
+    currentAnimation = anim
+  }
+  
   override def draw(batch: SpriteBatch, parentAlpha: Float) = {
-    batch.draw(animations(currentAnimation).getKeyFrame(animationTimer), getX(), getY(), getOriginX(), getOriginY(),
-                        getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+    batch.draw(animations(currentAnimation).getKeyFrame(animationTimer), getX(), getY())
   }
 }
