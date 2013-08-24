@@ -8,11 +8,20 @@ import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.Gdx.graphics
 import com.car.l.LudumGame
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Gdx.gl
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.GL10
 
 class MovementTestScreen(game: LudumGame) extends AbstractScreen(game) {
   override def show() {
     stage.addActor(new Character)
+  }
+  
+  override def render(delta: Float){
+    gl.glClearColor(0, 0, 1, 1);
+    gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    stage.act(delta)
+    stage.draw()
   }
 }
 

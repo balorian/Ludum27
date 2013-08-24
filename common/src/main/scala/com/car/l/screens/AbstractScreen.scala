@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx.graphics
 import com.badlogic.gdx.Gdx.gl
 import com.car.l.LudumGame
 import com.badlogic.gdx.graphics.GL10
+import com.badlogic.gdx.InputProcessor
 
 abstract class AbstractScreen(val game: LudumGame) extends Screen {
   var paused = false
@@ -51,4 +52,6 @@ abstract class AbstractScreen(val game: LudumGame) extends Screen {
   def resize(width: Int, height: Int): Unit = {
     stage.setViewport(width, height, false)
   }
+  
+  def inputProcessor : InputProcessor = stage
 }

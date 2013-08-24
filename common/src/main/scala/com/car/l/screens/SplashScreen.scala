@@ -10,7 +10,8 @@ import com.car.l.LudumGame
 
 class SplashScreen(game: LudumGame) extends AbstractScreen(game) {
   var done = false
-
+  var drawOnly = false
+  
   def create() {
     Assets.assets.loadAll
 
@@ -39,7 +40,8 @@ class SplashScreen(game: LudumGame) extends AbstractScreen(game) {
       Gdx.app.debug("Splash", "Loaded " + progress * 100 + "%");
     }
 
-    if (done) {
+    if (done && !drawOnly) {
+      drawOnly = true
       this.game.transitionToScreen(this.game.testScreen)
     }
 

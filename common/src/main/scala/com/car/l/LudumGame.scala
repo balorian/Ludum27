@@ -7,10 +7,11 @@ import com.badlogic.gdx.Application
 import com.car.l.screens.MovementTestScreen
 import com.car.l.screens.AbstractScreen
 import com.car.l.screens.SplashScreen
+import com.car.l.screens.TransitionScreen
 
 class LudumGame extends Game {
   lazy val testScreen = new MovementTestScreen(this)
-  //  lazy val transitionScreen = new TransitionScreen
+  lazy val transitionScreen = new TransitionScreen(this)
   var currentScreen: Option[AbstractScreen] = None
 
   override def create() {
@@ -24,20 +25,18 @@ class LudumGame extends Game {
   }
 
   def transitionToScreen(screen: AbstractScreen) {
-    currentScreen.get.outOf()
-    screen.into()
-    currentScreen = Some(screen)
-    this.setScreen(screen)
-    //    transitionScreen = new TransitionScreen(this);
-    //    Gdx.input.setInputProcessor(transitionScreen.getInputProcessor());
-    //
-    //    transitionScreen.setCurrent(this.getScreen());
-    //    transitionScreen.setNext(screen);
-    //    transitionScreen.reset();
-    //
-    //    transitionScreen.resize(Gdx.graphics.getWidth(),
-    //      Gdx.graphics.getHeight());
-    //
-    //    setScreen(transitionScreen);
+    Gdx.input.setInputProcessor(transitionScreen.inputProcessor)
+
+    transitionScreen.current = currentScreen
+    transitionScreen.next = Some(screen)
+    transitionScreen.reset
+
+    setScreen(transitionScreen)
+  }
+
+  def transitionComplete() {
+    Gdx.input.setInputProcessor(transitionScreen.next.get.inputProcessor)
+    currentScreen = transitionScreen.next
+    setScreen(transitionScreen.next.get)
   }
 }
