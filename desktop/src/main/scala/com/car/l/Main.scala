@@ -7,7 +7,7 @@ object Main {
     val cfg = new LwjglApplicationConfiguration()
     cfg.title = "ludum"
     cfg.height = 480
-    cfg.width = 320
+    cfg.width = 640
     cfg.useGL20 = true
     cfg.forceExit = false
     new LwjglApplication(new LudumGame(), cfg)

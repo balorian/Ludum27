@@ -13,8 +13,7 @@ class SplashScreen extends AbstractScreen {
 
   def create() {
     val container = new Table
-    val atlas = new TextureAtlas(Gdx.files.internal("assets/images/ui.pack"))
-
+    val atlas = new TextureAtlas(Gdx.files.classpath("images/ui.pack"))
     stage.addActor(container)
     container.setFillParent(true)
 
