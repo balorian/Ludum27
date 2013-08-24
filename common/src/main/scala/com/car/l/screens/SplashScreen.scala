@@ -1,19 +1,18 @@
-package com.car.l
+package com.car.l.screens
 
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.scenes.scene2d.ui.Image
-import com.badlogic.gdx.graphics.g2d.Sprite
+import com.car.l.Assets
+import com.car.l.Assets.assets.manager
+import com.car.l.LudumGame
 
-import com.car.l.Assets.instance.manager
-
-class SplashScreen extends AbstractScreen {
+class SplashScreen(game: LudumGame) extends AbstractScreen(game) {
   var done = false
 
   def create() {
-    Assets.instance.loadAll
+    Assets.assets.loadAll
 
     val container = new Table
     val atlas = new TextureAtlas(Gdx.files.classpath("images/ui.pack"))
@@ -33,6 +32,7 @@ class SplashScreen extends AbstractScreen {
 
     if (manager.update() && !done) {
       done = true;
+      Gdx.app.debug("Splash", "Loading done!");
     } else if (!done) {
       // display loading information
       val progress = manager.getProgress();
@@ -40,14 +40,9 @@ class SplashScreen extends AbstractScreen {
     }
 
     if (done) {
-      //      game.transitionTo(game.adventureScreen);
+      this.game.transitionToScreen(this.game.testScreen)
     }
 
-    stage.act(delta)
-    stage.draw()
-  }
-
-  override def resize(width: Int, height: Int): Unit = {
-    stage.setViewport(width, height, false)
+    super.render(delta)
   }
 }
