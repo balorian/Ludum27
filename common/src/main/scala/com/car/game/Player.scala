@@ -89,16 +89,17 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     
     def spawnShot(dir: Int){
       val shot = ShotPool.getShot(screen)
-      shot.setPosition(getX + 48/2, getY + 48/2)
       var shotV: Vector2 = new Vector2(0, 0)
       if((1 & shootDir) > 0) shotV.add(0, 1)
       if((2 & shootDir) > 0) shotV.add(1, 0)
       if((4 & shootDir) > 0) shotV.add(0, -1)
       if((8 & shootDir) > 0) shotV.add(-1, 0)
+      val shotPos = new Vector2(getX + 48/2f, getY + 48/2f).add(shotV.scl(27f))
+      shot.setPosition(shotPos.x, shotPos.y)
       shot.deltaV = shotV.nor.scl(SPEED*3)
     }
     
-    if(shootDir > 0 && shootCooldown > WEAPON_COOLDOWN){
+    if(shootDir > 0 && shootCooldown > WEAPON_COOLDOWN && (shootDir != 5 || shootDir != 10)){
       spawnShot(shootDir)
       shootCooldown = 0
     }

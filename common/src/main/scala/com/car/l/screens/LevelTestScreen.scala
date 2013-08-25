@@ -26,6 +26,7 @@ import com.car.game.Entity
 import com.car.game.SoulShard
 import scala.util.Random
 import com.car.game.Meat
+import scala.collection.mutable.HashSet
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
@@ -40,11 +41,11 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val bg = Assets.assets.tileAtlas.createSprite("bg")
 
   val collectablesList: ListBuffer[Entity] = new ListBuffer
-  val spawnList: ListBuffer[SpawnPoint] = new ListBuffer
+  val spawnSet: HashSet[SpawnPoint] = HashSet.empty
 
   def setLevel(key: String) {
     def clearLists() {
-      spawnList.dropRight(0)
+      spawnSet.clear
       collectablesList.dropRight(0)
     }
 
@@ -53,7 +54,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.clear()
     stage.addActor(bgImage)
     stage.addActor(level.get)
-    spawnList foreach (stage.addActor(_))
+    spawnSet foreach (stage.addActor(_))
     collectablesList foreach (stage.addActor(_))
     stage.addActor(player)
   }

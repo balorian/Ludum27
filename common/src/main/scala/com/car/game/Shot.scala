@@ -13,8 +13,7 @@ object ShotPool{
   var freeShots: Stack[Shot] = new Stack[Shot]()
   
   def getShot(screen: LevelTestScreen): Shot = {
-    println("RETURNING A SHOT: " + freeShots.size)
-    if(freeShots.isEmpty) new Shot(screen, assets.creatureAtlas.findRegion("sword", 1))
+    if(freeShots.isEmpty) new Shot(screen, assets.creatureAtlas.findRegion("axe", 1))
     else {
       val ret = freeShots.pop()
       ret.setVisible(true)
@@ -25,28 +24,35 @@ object ShotPool{
   
   def returnShot(shot: Shot){
     shot.deltaV = new Vector2(0, 0)
+    shot.spinCounter = 0
+    shot.setVisible(false)
+    shot.remove
     freeShots.push(shot)
   }
 }
 
 class Shot(screen: LevelTestScreen, image: TextureRegion) extends Actor{
+  val damage = 7
   var deltaV = new Vector2(0, 0)
+  var spinCounter = 0
   screen.stage.addActor(this)
   
   override def act(delta: Float){
     setPosition(getX + deltaV.x, getY + deltaV.y)
     
-    val mapLoc = screen.level.get.unitToMap((getX+image.getRegionWidth/2, getY+image.getRegionHeight/2))
+    screen.spawnSet.foreach(spoint => if (spoint.contains(getX, getY)) {spoint.health -= damage; ShotPool.returnShot(this)})
     
     if(screen.level.get.collidesWith(getX+image.getRegionWidth/2, getY+image.getRegionHeight/2, Tile.WALL)){
-      setVisible(false)
-      remove
       ShotPool.returnShot(this)
     }
+    spinCounter += 1
+    setRotation(spinCounter * 45)
   }
   
   override def draw(batch: SpriteBatch, parentAlpha: Float){
-    batch.draw(image, getX, getY)
+    val center = image.getRegionWidth/2
+    batch.draw(image.getTexture, getX-center, getY-center, image.getRegionWidth/2, image.getRegionHeight/2, image.getRegionWidth, image.getRegionHeight, 1, 1,
+    		 	getRotation, image.getRegionX, image.getRegionY, image.getRegionWidth, image.getRegionHeight, false, false)
   }
   
 }

@@ -38,8 +38,8 @@ object LevelLoader {
     
     def spawnKey(i: Int, j: Int) = screen.collectablesList.append(createKey(i, j))
     def spawnDoor(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Door at " + i + "/" + j)
-    def spawnPoint1(i: Int, j: Int) = screen.spawnList.append(createSpawn(i, j))
-    def spawnPoint2(i: Int, j: Int) = screen.spawnList.append(createSpawn(i, j))
+    def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn(i, j))
+    def spawnPoint2(i: Int, j: Int) = screen.spawnSet.add(createSpawn(i, j))
     def spawnBreakable(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Breakable at " + i + "/" + j)
 
     val levelData = new Pixmap(Gdx.files.classpath(MAPS_DIR + key + MAP_SUFFIX));

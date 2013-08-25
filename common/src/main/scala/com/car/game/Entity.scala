@@ -34,6 +34,7 @@ abstract class Entity(animations: Map[String, Animation], entitySize: Int, boxOf
   
   def updateBoundingBox() = boundingBox.setPosition(getX+boxOffset, getY+boxOffset)
   
+  def contains(x: Float, y: Float) = boundingBox.contains(x, y)
   def collidesWith(that: Entity) = boundingBox.overlaps(that.boundingBox)
   
   override def draw(batch: SpriteBatch, parentAlpha: Float) = {
