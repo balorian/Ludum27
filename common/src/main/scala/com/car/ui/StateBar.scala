@@ -28,8 +28,6 @@ class StateBar(val pX: Float, val pY: Float, val pWidth: Float, val pHeight: Flo
   override def draw(batch: SpriteBatch, parentAlpha: Float) {
     super.draw(batch, parentAlpha)
 
-    ratio = MathUtils.clamp(1f - stateTime / 10f, 0, 1)
-
     batch.setColor(pColor)
     liquid.draw(batch, pX, pY, pWidth, MathUtils.clamp(pHeight * ratio, 32, pHeight))
     batch.setColor(Color.WHITE)

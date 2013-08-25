@@ -32,7 +32,7 @@ import scala.collection.mutable.HashSet
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
 
-  lazy val ui = new GameUI
+  lazy val ui = new GameUI(player)
 
   var level: Option[Level] = None
   val player = new Player(Map("walk" -> new Animation(0.10f, assets.creatureAtlas.createSprites("walk_u"), Animation.LOOP),
@@ -80,6 +80,8 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.act()
     cameraControl()
     stage.draw()
+    
+    ui.update
     ui.render(delta)
 
     def cameraControl() {

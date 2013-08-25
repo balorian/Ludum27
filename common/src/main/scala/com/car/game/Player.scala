@@ -20,16 +20,16 @@ class PlayerProcessor(player: Player) extends InputProcessor {
 
   override def keyDown(keycode: Int): Boolean = {
     if (moveKeys.contains(keycode)) player.movement(moveKeys(keycode)) = true
-    if (shootKeys.contains(keycode)){
+    if (shootKeys.contains(keycode)) {
       player.shootDir += shootKeys(keycode)
-      
+
     }
     true
   }
 
   override def keyUp(keycode: Int): Boolean = {
     if (moveKeys.contains(keycode)) player.movement(moveKeys(keycode)) = false
-    if (shootKeys.contains(keycode)){
+    if (shootKeys.contains(keycode)) {
       player.shootDir -= shootKeys(keycode)
     }
     true
@@ -50,24 +50,35 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   var movement = Array(false, false, false, false)
   var shootDir = 0
   var shootCooldown = 0f
+
+  val maxHealth = 100
+  var currentHealth = maxHealth
+
+  val maxSpirit = 10f
+  var currentSpirit : Float = maxSpirit
+
+  var score = 0
+  var keys = 0
   
-  
-  setPosition(4*48, 4*48)
-  
+  setPosition(4 * 48, 4 * 48)
+
   override def act(delta: Float) {
     if (movement(0) || movement(1) || movement(2) || movement(3)) swapAnimation("walk")
     else swapAnimation("idle")
-    
+
     shootCooldown += delta
-    
+
     super.act(delta)
-    var deltaV = new Vector2(0, 0)
-    if (movement(0)) {deltaV.add(0, 1); setRotation(0)}
-    if (movement(2)) {deltaV.add(0, -1); setRotation(180)}
-    if (movement(1)) {deltaV.add(1, 0); if(movement(0)) setRotation(315) else if(movement(2)) setRotation(225) else setRotation(270)}
-    if (movement(3)) {deltaV.add(-1, 0); if(movement(0)) setRotation(45) else if(movement(2)) setRotation(135) else setRotation(90)}
-    deltaV.nor().scl(SPEED)
     
+    currentSpirit -= delta
+
+    var deltaV = new Vector2(0, 0)
+    if (movement(0)) { deltaV.add(0, 1); setRotation(0) }
+    if (movement(2)) { deltaV.add(0, -1); setRotation(180) }
+    if (movement(1)) { deltaV.add(1, 0); if (movement(0)) setRotation(315) else if (movement(2)) setRotation(225) else setRotation(270) }
+    if (movement(3)) { deltaV.add(-1, 0); if (movement(0)) setRotation(45) else if (movement(2)) setRotation(135) else setRotation(90) }
+    deltaV.nor().scl(SPEED)
+
     def scan(step: Float, dir: Vector2, length: Float) {
       val newLength = length - step
       val oldDir = new Vector2(dir.x, dir.y)
@@ -79,27 +90,27 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
           setPosition(oldPos._1, oldPos._2)
         else if (newLength < step)
           scan(newLength, oldDir, 0)
-        else 
+        else
           scan(step, oldDir, newLength)
       }
     }
 
     scan(0.05f, new Vector2(deltaV.x, 0).nor, deltaV.len)
     scan(0.05f, new Vector2(0, deltaV.y).nor, deltaV.len)
-    
-    def spawnShot(dir: Int){
+
+    def spawnShot(dir: Int) {
       val shot = ShotPool.getShot(screen)
       var shotV: Vector2 = new Vector2(0, 0)
-      if((1 & shootDir) > 0) shotV.add(0, 1)
-      if((2 & shootDir) > 0) shotV.add(1, 0)
-      if((4 & shootDir) > 0) shotV.add(0, -1)
-      if((8 & shootDir) > 0) shotV.add(-1, 0)
-      val shotPos = new Vector2(getX + 48/2f, getY + 48/2f).add(shotV.scl(27f))
+      if ((1 & shootDir) > 0) shotV.add(0, 1)
+      if ((2 & shootDir) > 0) shotV.add(1, 0)
+      if ((4 & shootDir) > 0) shotV.add(0, -1)
+      if ((8 & shootDir) > 0) shotV.add(-1, 0)
+      val shotPos = new Vector2(getX + 48 / 2f, getY + 48 / 2f).add(shotV.scl(27f))
       shot.setPosition(shotPos.x, shotPos.y)
-      shot.deltaV = shotV.nor.scl(SPEED*3)
+      shot.deltaV = shotV.nor.scl(SPEED * 3)
     }
-    
-    if(shootDir > 0 && shootCooldown > WEAPON_COOLDOWN && (shootDir != 5 || shootDir != 10)){
+
+    if (shootDir > 0 && shootCooldown > WEAPON_COOLDOWN && (shootDir != 5 || shootDir != 10)) {
       spawnShot(shootDir)
       shootCooldown = 0
     }

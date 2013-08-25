@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.GL10
 import com.car.ui.GameUI
 
 class MovementTestScreen(game: LudumGame) extends AbstractScreen(game) {
-  lazy val ui = new GameUI
+//  lazy val ui = new GameUI()
 
   override def show() {
     stage.addActor(new Character)
@@ -26,7 +26,7 @@ class MovementTestScreen(game: LudumGame) extends AbstractScreen(game) {
     stage.act(delta)
     stage.draw()
 
-    ui.render(delta)
+//    ui.render(delta)
   }
 }
 
