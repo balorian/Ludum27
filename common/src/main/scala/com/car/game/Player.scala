@@ -12,11 +12,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.Pixmap.Format
+import com.car.l.screens.LevelTestScreen
 
 class PlayerProcessor(player: Player) extends InputProcessor {
   val moveKeys = Map(Keys.W -> 0, Keys.D -> 1, Keys.S -> 2, Keys.A -> 3)
   val shootKeys = Map(Keys.UP -> 0, Keys.RIGHT -> 1, Keys.DOWN -> 2, Keys.LEFT -> 3)
-  
+
   override def keyDown(keycode: Int): Boolean = {
     if (moveKeys.contains(keycode)) player.movement(moveKeys(keycode)) = true
     true
@@ -26,46 +27,57 @@ class PlayerProcessor(player: Player) extends InputProcessor {
     if (moveKeys.contains(keycode)) player.movement(moveKeys(keycode)) = false
     true
   }
-  
-  override def keyTyped (char: Char) = false
-  override def touchDown (screenX: Int, screenY: Int, pointer: Int, button: Int) = false
-  override def touchUp (screenX: Int, screenY: Int, pointer: Int, button: Int) = false
-  override def touchDragged (screenX: Int, screenY: Int, pointer: Int) = false
-  override def mouseMoved (screenX: Int, screenY: Int) = false
-  override def scrolled (amount: Int) = false
-  
+
+  override def keyTyped(char: Char) = false
+  override def touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
+  override def touchUp(screenX: Int, screenY: Int, pointer: Int, button: Int) = false
+  override def touchDragged(screenX: Int, screenY: Int, pointer: Int) = false
+  override def mouseMoved(screenX: Int, screenY: Int) = false
+  override def scrolled(amount: Int) = false
+
 }
 
-class Player(animations: Map[String, Animation]) extends Entity(animations) {
+class Player(animations: Map[String, Animation], var screen: LevelTestScreen) extends Entity(animations, 32, 5) {
   val SPEED = 5
-  val PLAYER_SIZE = 32
-  val BOX_OFFSET = 5
-  val boundingBox = new Rectangle(BOX_OFFSET, BOX_OFFSET, PLAYER_SIZE-BOX_OFFSET, PLAYER_SIZE-BOX_OFFSET)
+  val WEAPON_COOLDOWN = 20
   var movement = Array(false, false, false, false)
   var shootDir = 0
   var shootFlag = false
-  
+  var shootCooldown = 0
+
   setPosition(64, 64)
-    
+
   override def act(delta: Float) {
     super.act(delta)
-    
+
     var deltaV = new Vector2(0, 0)
-    if(movement(0)) deltaV.add(0, 1)
-    if(movement(1)) deltaV.add(1, 0)
-    if(movement(2)) deltaV.add(0, -1)
-    if(movement(3)) deltaV.add(-1, 0)
+    if (movement(0)) deltaV.add(0, 1)
+    if (movement(1)) deltaV.add(1, 0)
+    if (movement(2)) deltaV.add(0, -1)
+    if (movement(3)) deltaV.add(-1, 0)
     deltaV.nor().scl(SPEED)
-        
-    setPosition(getX + deltaV.x, getY + deltaV.y)
-    boundingBox.set(getX + BOX_OFFSET, getY + BOX_OFFSET, PLAYER_SIZE - 2 * BOX_OFFSET, PLAYER_SIZE - 2 * BOX_OFFSET)
-    
-//    if(level.collides(boundingBox)){
-//      println("COLLIDES")
-//    }
+
+    def scan(step: Float, dir: Vector2, length: Float) {
+      val newLength = length - step
+      val oldDir = new Vector2(dir.x, dir.y)
+      if (length > 0) {
+        val oldPos = (getX, getY)
+        val scl = dir.scl(step)
+        setPosition(scl.x + getX, scl.y + getY)
+        if (screen.level.collidesWith(boundingBox, Tile.WALL) || screen.level.collidesWith(boundingBox, Tile.WATER))
+          setPosition(oldPos._1, oldPos._2)
+        else if (newLength < step)
+          scan(newLength, oldDir, 0)
+        else 
+          scan(step, oldDir, newLength)
+      }
+    }
+
+    scan(0.05f, new Vector2(deltaV.x, 0).nor, deltaV.len)
+    scan(0.05f, new Vector2(0, deltaV.y).nor, deltaV.len)
   }
-  
-  override def draw(batch: SpriteBatch, parentAlpha: Float){
+
+  override def draw(batch: SpriteBatch, parentAlpha: Float) {
     super.draw(batch, parentAlpha)
     val pixmap = new Pixmap(22, 22, Format.RGBA8888);
     pixmap.setColor(1, 0, 0, 1f);

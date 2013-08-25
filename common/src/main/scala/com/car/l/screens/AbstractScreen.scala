@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx.gl
 import com.car.l.LudumGame
 import com.badlogic.gdx.graphics.GL10
 import com.badlogic.gdx.InputProcessor
+import com.badlogic.gdx.graphics.OrthographicCamera
 
 abstract class AbstractScreen(val game: LudumGame) extends Screen {
   var paused = false
@@ -45,7 +46,10 @@ abstract class AbstractScreen(val game: LudumGame) extends Screen {
   def render(delta: Float): Unit = {
     gl.glClearColor(0, 0, 0, 1);
     gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+    println("CALL")
     stage.act(delta)
+    stage.getCamera.asInstanceOf[OrthographicCamera].zoom = 0.75f
+    stage.getCamera.update
     stage.draw()
   }
 

@@ -26,21 +26,22 @@ class Level(val mapWidth: Int, val mapHeight: Int, tileMap: Array[Int]) extends 
 
   val tileSheet = assets.tileAtlas
 
+
+  
+  
   def getTile(x: Int, y: Int): Int = if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) tileMap(x + mapWidth * y) else Tile.EMPTY
+  def unitToMap(pair: (Float, Float)) = (floor(pair._1/Tile.TILE_SIZE), floor(pair._2/Tile.TILE_SIZE))
 
-  override def act(delta: Float) {
-  }
+  def collidesWith(x: Float, y: Float, tileType: Int): Boolean = getTile(floor(x), floor(y)) == tileType
 
-  def collides(x: Float, y: Float): Boolean = getTile(x.round, y.round) == Tile.WALL
+  def collidesWith(rect: Rectangle, tileType: Int): Boolean =  {
+    val tlc = unitToMap(rect.getX, rect.getY+rect.getHeight)
+    val trc = unitToMap(rect.getX+rect.getWidth, (rect.getY+rect.getHeight))
+    val blc = unitToMap(rect.getX, rect.getY)
+    val brc = unitToMap(rect.getX+rect.getWidth, rect.getY)
 
-  def collides(rect: Rectangle): Boolean = {
-    val tlc = (rect.getX / Tile.TILE_SIZE, (rect.getY + rect.getHeight) / Tile.TILE_SIZE)
-    val trc = ((rect.getX + rect.getWidth) / Tile.TILE_SIZE, (rect.getY + rect.getHeight) / Tile.TILE_SIZE)
-    val blc = (rect.getX / Tile.TILE_SIZE, rect.getY / Tile.TILE_SIZE)
-    val brc = ((rect.getX + rect.getWidth) / Tile.TILE_SIZE, rect.getY / Tile.TILE_SIZE)
-
-    getTile(floor(blc._1), floor(blc._2)) == Tile.WALL || getTile(floor(brc._1), floor(brc._2)) == Tile.WALL ||
-      getTile(floor(tlc._1), floor(tlc._2)) == Tile.WALL || getTile(floor(trc._1), floor(trc._2)) == Tile.WALL
+    getTile(blc._1, blc._2) == tileType || getTile(brc._1, brc._2) == tileType ||
+    getTile(tlc._1, tlc._2) == tileType || getTile(trc._1, trc._2) == tileType 
   }
 
   override def draw(batch: SpriteBatch, parentAlpha: Float) {
