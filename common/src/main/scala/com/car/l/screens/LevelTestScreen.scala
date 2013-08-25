@@ -20,24 +20,34 @@ import com.car.l.Assets
 import com.badlogic.gdx.graphics.GL10
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.car.game.SpawnPoint
+
+import scala.collection.mutable.ListBuffer
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
 
   lazy val ui = new GameUI
   var level: Option[Level] = None
-  val player = new Player(Map("walk" -> new Animation(0.10f, assets.creatureAtlas.createSprites("walk_u"), Animation.LOOP), 
-		  					  "idle" -> new Animation(1, assets.creatureAtlas.createSprite("walk_u", 2))), this)
+  val player = new Player(Map("walk" -> new Animation(0.10f, assets.creatureAtlas.createSprites("walk_u"), Animation.LOOP),
+    "idle" -> new Animation(1, assets.creatureAtlas.createSprite("walk_u", 2))), this)
   lazy val sprite = Assets.assets.tileAtlas.createSprite("bg")
   lazy val bgImage = new Image(sprite)
   val bg = Assets.assets.tileAtlas.createSprite("bg")
 
+  val spawnList: ListBuffer[SpawnPoint] = new ListBuffer
+
   def setLevel(key: String) {
-    level = Some(LevelLoader.load(key))
+    def clearLists() {
+      spawnList.dropRight(0)
+    }
+
+    level = Some(LevelLoader.load(key, this))
+
     stage.clear()
-    println(sprite)
     stage.addActor(bgImage)
     stage.addActor(level.get)
+    spawnList foreach (stage.addActor(_))
     stage.addActor(player)
   }
 
@@ -56,7 +66,8 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   override def render(delta: Float) {
     gl.glClearColor(0, 0, 0, 1)
     gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
-    
+
+    //    spawnList foreach (sp => sp.act(delta))
     stage.act()
     cameraControl()
     stage.draw()
@@ -68,6 +79,9 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
       stage.getCamera().asInstanceOf[OrthographicCamera].zoom = 0.75f
       stage.getCamera().update()
     }
+  }
 
+  def spawnOnPoint(point: SpawnPoint) {
+    Gdx.app.debug(LOG_TAG, "Spawn on " + point.getX() + ", " + point.getY())
   }
 }
