@@ -20,10 +20,6 @@ object Tile {
 }
 
 class Level(val mapWidth: Int, val mapHeight: Int, tileMap: Array[Int]) extends Actor {
-  //  this(width:Int, height:Int, map: Array[Int]){
-  //    super()
-  //  }
-
   val tileSheet = assets.tileAtlas
 
 
