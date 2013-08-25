@@ -26,7 +26,8 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
   lazy val ui = new GameUI
   var level: Option[Level] = None
-  val player = new Player(Map("idle" -> new Animation(0.25f, assets.creatureAtlas.createSprites("main"), Animation.LOOP)), this)
+  val player = new Player(Map("walk" -> new Animation(0.10f, assets.creatureAtlas.createSprites("walk_u"), Animation.LOOP), 
+		  					  "idle" -> new Animation(1, assets.creatureAtlas.createSprite("walk_u", 2))), this)
   lazy val sprite = Assets.assets.tileAtlas.createSprite("bg")
   lazy val bgImage = new Image(sprite)
   val bg = Assets.assets.tileAtlas.createSprite("bg")

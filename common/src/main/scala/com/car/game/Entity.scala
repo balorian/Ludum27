@@ -21,8 +21,10 @@ abstract class Entity(animations: Map[String, Animation], entitySize: Int, boxOf
   }
   
   def swapAnimation(anim: String) {
-    animationTimer = 0
-    currentAnimation = anim
+    if(anim != currentAnimation){
+      animationTimer = 0
+      currentAnimation = anim
+    }
   }
   
   override def setPosition(x: Float, y: Float) = {
@@ -35,8 +37,9 @@ abstract class Entity(animations: Map[String, Animation], entitySize: Int, boxOf
   def collidesWith(that: Entity) = boundingBox.overlaps(that.boundingBox)
   
   override def draw(batch: SpriteBatch, parentAlpha: Float) = {
-    batch.draw(animations(currentAnimation).getKeyFrame(animationTimer), getX, getY)
-    //batch.draw(animations(currentAnimation).getKeyFrame(animationTimer), getX, getY, entitySize/2, entitySize/2, entitySize, entitySize, 1, 1,
-    	//	 	getRotation, 0, 0, entitySize, entitySize, false, false)
+    //batch.draw(animations(currentAnimation).getKeyFrame(animationTimer), getX, getY)
+    val region = animations(currentAnimation).getKeyFrame(animationTimer)
+    batch.draw(region.getTexture, getX, getY, entitySize/2, entitySize/2, entitySize, entitySize, 1, 1,
+    		 	getRotation, region.getRegionX, region.getRegionY, entitySize, entitySize, false, false)
   }
 }

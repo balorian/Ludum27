@@ -7,7 +7,6 @@ import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.InputProcessor
 import com.badlogic.gdx.math.Rectangle
-import com.badlogic.gdx.math.collision.BoundingBox
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
@@ -37,26 +36,28 @@ class PlayerProcessor(player: Player) extends InputProcessor {
 
 }
 
-class Player(animations: Map[String, Animation], var screen: LevelTestScreen) extends Entity(animations, 32, 5) {
+class Player(animations: Map[String, Animation], var screen: LevelTestScreen) extends Entity(animations, 48, 7) {
   val SPEED = 5
   val WEAPON_COOLDOWN = 20
   var movement = Array(false, false, false, false)
   var shootDir = 0
   var shootFlag = false
   var shootCooldown = 0
-
-  setPosition(64, 64)
-
+  
+  setPosition(4*48, 4*48)
+  
   override def act(delta: Float) {
+    if (movement(0) || movement(1) || movement(2) || movement(3)) swapAnimation("walk")
+    else swapAnimation("idle")
+    
     super.act(delta)
-
     var deltaV = new Vector2(0, 0)
     if (movement(0)) {deltaV.add(0, 1); setRotation(0)}
-    if (movement(1)) {deltaV.add(1, 0); setRotation(90)}
     if (movement(2)) {deltaV.add(0, -1); setRotation(180)}
-    if (movement(3)) {deltaV.add(-1, 0); setRotation(270)}
+    if (movement(1)) {deltaV.add(1, 0); if(movement(0)) setRotation(315) else if(movement(2)) setRotation(225) else setRotation(270)}
+    if (movement(3)) {deltaV.add(-1, 0); if(movement(0)) setRotation(45) else if(movement(2)) setRotation(135) else setRotation(90)}
     deltaV.nor().scl(SPEED)
-
+    
     def scan(step: Float, dir: Vector2, length: Float) {
       val newLength = length - step
       val oldDir = new Vector2(dir.x, dir.y)
@@ -75,14 +76,13 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
     scan(0.05f, new Vector2(deltaV.x, 0).nor, deltaV.len)
     scan(0.05f, new Vector2(0, deltaV.y).nor, deltaV.len)
-    
   }
 
   override def draw(batch: SpriteBatch, parentAlpha: Float) {
     super.draw(batch, parentAlpha)
-    val pixmap = new Pixmap(22, 22, Format.RGBA8888);
+    val pixmap = new Pixmap(34, 34, Format.RGBA8888);
     pixmap.setColor(1, 0, 0, 1f);
-    pixmap.drawRectangle(0, 0, 22, 22);
+    pixmap.drawRectangle(0, 0, 34, 34);
     val texmex = new Texture(pixmap);
     batch.draw(texmex, boundingBox.x, boundingBox.y)
   }

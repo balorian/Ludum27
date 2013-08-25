@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.MathUtils.floor
 
 object Tile {
-  val TILE_SIZE = 32
+  val TILE_SIZE = 48
 
   val GROUND = 0xFFFFFFFF
   val WALL = 0x000000FF
