@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.audio.Sound
 
 object Assets {
   val assets = new Assets
@@ -17,7 +18,11 @@ class Assets {
   lazy val uiAtlas = manager.get("images/ui.pack", classOf[TextureAtlas])
   lazy val creatureAtlas = manager.get("images/creatures.pack", classOf[TextureAtlas])
   lazy val tileAtlas = manager.get("images/tiles.pack", classOf[TextureAtlas])
-  
+
+  lazy val hit = manager.get("sounds/hit.wav", classOf[Sound])
+  lazy val hurt = manager.get("sounds/hurt.wav", classOf[Sound])
+  lazy val pickup = manager.get("sounds/pickup.wav", classOf[Sound])
+
   val font: BitmapFont = new BitmapFont(Gdx.files.classpath("images/ronda32_bold.fnt"), false)
 
   val skin: Skin = {
@@ -32,5 +37,10 @@ class Assets {
     manager.load("images/ui.pack", classOf[TextureAtlas])
     manager.load("images/creatures.pack", classOf[TextureAtlas])
     manager.load("images/tiles.pack", classOf[TextureAtlas])
+
+    manager.load("sounds/hit.wav", classOf[Sound])
+    manager.load("sounds/hurt.wav", classOf[Sound])
+    manager.load("sounds/pickup.wav", classOf[Sound])
+
   }
 }

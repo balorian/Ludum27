@@ -40,7 +40,7 @@ class Shot(screen: LevelTestScreen, image: TextureRegion) extends Actor{
   override def act(delta: Float){
     setPosition(getX + deltaV.x, getY + deltaV.y)
     
-    screen.spawnSet.foreach(spoint => if (spoint.contains(getX, getY)) {spoint.health -= damage; ShotPool.returnShot(this)})
+    screen.spawnSet.foreach(spoint => if (spoint.contains(getX, getY)) {spoint.health -= damage; assets.hit.play(); ShotPool.returnShot(this)})
     
     if(screen.level.get.collidesWith(getX+image.getRegionWidth/2, getY+image.getRegionHeight/2, Tile.WALL)){
       ShotPool.returnShot(this)

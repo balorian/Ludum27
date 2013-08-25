@@ -25,7 +25,8 @@ object LevelLoader {
 
   def load(key: String, screen: LevelTestScreen): Level = {
     def createSpawn(x: Int, y: Int): SpawnPoint = {
-      val sp = new SpawnPoint(Map("idle" -> new Animation(0.10f, assets.creatureAtlas.createSprites("spawn"), Animation.LOOP)), screen)
+      val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn"), Animation.LOOP),
+        "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn_damaged"), Animation.LOOP)), screen)
       sp.setPosition(x, y)
       sp
     }
@@ -35,7 +36,7 @@ object LevelLoader {
       key.setPosition(x, y)
       key
     }
-    
+
     def spawnKey(i: Int, j: Int) = screen.collectablesList.append(createKey(i, j))
     def spawnDoor(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Door at " + i + "/" + j)
     def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn(i, j))

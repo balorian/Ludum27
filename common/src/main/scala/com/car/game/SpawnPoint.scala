@@ -9,9 +9,14 @@ object SpawnPoint {
 
 class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen) extends Entity(animations, 48, 0) {
   var stateTime: Float = 0
-  var health = 20
+  val maxHealth = 20
+  var health = maxHealth
   
   override def act(delta: Float) {
+    if(health <= maxHealth / 2){
+      this.currentAnimation = "damaged"
+    }
+    
     stateTime += delta
     if (stateTime >= SpawnPoint.SPAWN_TIME) {
       stateTime = 0
