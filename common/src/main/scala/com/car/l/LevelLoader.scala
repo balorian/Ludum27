@@ -34,18 +34,21 @@ object LevelLoader {
     for (j <- 0 until height; i <- 0 until width) {
       val pixel = levelData.getPixel(i, j)
 
+      def flip(j: Int) = height - (j+1)
+      val index = flip(j) * width + i
+      
       pixel match {
         case KEY =>
-          tilemap(j * width + i) = Tile.GROUND; spawnKey(i, j)
+          tilemap(index) = Tile.GROUND; spawnKey(i, j)
         case DOOR =>
-          tilemap(j * width + i) = Tile.GROUND; spawnDoor(i, j)
+          tilemap(index) = Tile.GROUND; spawnDoor(i, j)
         case SPAWN_1 =>
-          tilemap(j * width + i) = Tile.GROUND; spawnPoint1(i, j)
+          tilemap(index) = Tile.GROUND; spawnPoint1(i, j)
         case SPAWN_2 =>
-          tilemap(j * width + i) = Tile.GROUND; spawnPoint2(i, j)
+          tilemap(index) = Tile.GROUND; spawnPoint2(i, j)
         case BREAKABLE_WALL =>
-          tilemap(j * width + i) = Tile.GROUND; spawnBreakable(i, j)
-        case _ => tilemap(j * width + i) = pixel
+          tilemap(index) = Tile.GROUND; spawnBreakable(i, j)
+        case _ => tilemap(index) = pixel
       }
     }
 

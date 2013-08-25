@@ -51,10 +51,10 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     super.act(delta)
 
     var deltaV = new Vector2(0, 0)
-    if (movement(0)) deltaV.add(0, 1)
-    if (movement(1)) deltaV.add(1, 0)
-    if (movement(2)) deltaV.add(0, -1)
-    if (movement(3)) deltaV.add(-1, 0)
+    if (movement(0)) {deltaV.add(0, 1); setRotation(0)}
+    if (movement(1)) {deltaV.add(1, 0); setRotation(90)}
+    if (movement(2)) {deltaV.add(0, -1); setRotation(180)}
+    if (movement(3)) {deltaV.add(-1, 0); setRotation(270)}
     deltaV.nor().scl(SPEED)
 
     def scan(step: Float, dir: Vector2, length: Float) {
@@ -75,6 +75,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
     scan(0.05f, new Vector2(deltaV.x, 0).nor, deltaV.len)
     scan(0.05f, new Vector2(0, deltaV.y).nor, deltaV.len)
+    
   }
 
   override def draw(batch: SpriteBatch, parentAlpha: Float) {

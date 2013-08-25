@@ -35,6 +35,8 @@ abstract class Entity(animations: Map[String, Animation], entitySize: Int, boxOf
   def collidesWith(that: Entity) = boundingBox.overlaps(that.boundingBox)
   
   override def draw(batch: SpriteBatch, parentAlpha: Float) = {
-    batch.draw(animations(currentAnimation).getKeyFrame(animationTimer), getX(), getY())
+    batch.draw(animations(currentAnimation).getKeyFrame(animationTimer), getX, getY)
+    //batch.draw(animations(currentAnimation).getKeyFrame(animationTimer), getX, getY, entitySize/2, entitySize/2, entitySize, entitySize, 1, 1,
+    	//	 	getRotation, 0, 0, entitySize, entitySize, false, false)
   }
 }
