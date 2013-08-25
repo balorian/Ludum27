@@ -23,12 +23,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.car.game.SpawnPoint
 import scala.collection.mutable.ListBuffer
 import com.car.game.Entity
+import com.car.game.SoulShard
+import scala.util.Random
+import com.car.game.Meat
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
-    
+
   lazy val ui = new GameUI
-  
+
   var level: Option[Level] = None
   val player = new Player(Map("walk" -> new Animation(0.10f, assets.creatureAtlas.createSprites("walk_u"), Animation.LOOP),
     "idle" -> new Animation(1, assets.creatureAtlas.createSprite("walk_u", 2))), this)
@@ -71,6 +74,14 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     gl.glClearColor(0, 0, 0, 1)
     gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
 
+    val r = new Random
+    if (r.nextFloat < 0.01) {
+      createSouldShard(player.getX, player.getY)
+    }
+    if (r.nextFloat < 0.01) {
+      createMeat(player.getX, player.getY)
+    }
+
     //    spawnList foreach (sp => sp.act(delta))
     stage.act()
     cameraControl()
@@ -87,5 +98,19 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
   def spawnOnPoint(point: SpawnPoint) {
     Gdx.app.debug(LOG_TAG, "Spawn on " + point.getX() + ", " + point.getY())
+  }
+
+  def createSouldShard(x: Float, y: Float) = {
+    val ss = new SoulShard(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("soul_shard"), Animation.LOOP)))
+    ss.setPosition(x, y)
+    collectablesList.append(ss)
+    stage.addActor(ss)
+  }
+
+  def createMeat(x: Float, y: Float) = {
+    val meat = new Meat(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("meat"), Animation.LOOP)))
+    meat.setPosition(x, y)
+    collectablesList.append(meat)
+    stage.addActor(meat)
   }
 }

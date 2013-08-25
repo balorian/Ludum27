@@ -35,7 +35,7 @@ object LevelLoader {
       key.setPosition(x, y)
       key
     }
-
+    
     def spawnKey(i: Int, j: Int) = screen.collectablesList.append(createKey(i, j))
     def spawnDoor(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Door at " + i + "/" + j)
     def spawnPoint1(i: Int, j: Int) = screen.spawnList.append(createSpawn(i, j))
