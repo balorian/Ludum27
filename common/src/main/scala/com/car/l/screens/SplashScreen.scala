@@ -11,7 +11,7 @@ import com.car.l.LudumGame
 class SplashScreen(game: LudumGame) extends AbstractScreen(game) {
   var done = false
   var drawOnly = false
-  
+
   def create() {
     Assets.assets.loadAll
 
