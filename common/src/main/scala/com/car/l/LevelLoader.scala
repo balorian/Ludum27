@@ -24,9 +24,18 @@ object LevelLoader {
   val BREAKABLE_WALL = 0xD67FFFFF
 
   def load(key: String, screen: LevelTestScreen): Level = {
-    def createSpawn(x: Int, y: Int): SpawnPoint = {
+    def createSpawn1(x: Int, y: Int): SpawnPoint = {
       val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn"), Animation.LOOP),
-        "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn_damaged"), Animation.LOOP)), screen)
+        "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn_damaged"), Animation.LOOP)),
+        screen, 20)
+      sp.setPosition(x, y)
+      sp
+    }
+
+    def createSpawn2(x: Int, y: Int): SpawnPoint = {
+      val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn2"), Animation.LOOP),
+        "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn2_damaged"), Animation.LOOP)),
+        screen, 40)
       sp.setPosition(x, y)
       sp
     }
@@ -39,8 +48,8 @@ object LevelLoader {
 
     def spawnKey(i: Int, j: Int) = screen.collectablesList.append(createKey(i, j))
     def spawnDoor(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Door at " + i + "/" + j)
-    def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn(i, j))
-    def spawnPoint2(i: Int, j: Int) = screen.spawnSet.add(createSpawn(i, j))
+    def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn1(i, j))
+    def spawnPoint2(i: Int, j: Int) = screen.spawnSet.add(createSpawn2(i, j))
     def spawnBreakable(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Breakable at " + i + "/" + j)
 
     val levelData = new Pixmap(Gdx.files.classpath(MAPS_DIR + key + MAP_SUFFIX));

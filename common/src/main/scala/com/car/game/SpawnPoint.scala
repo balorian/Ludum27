@@ -7,9 +7,8 @@ object SpawnPoint {
   val SPAWN_TIME = 5f
 }
 
-class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen) extends Entity(animations, 48, 0) {
+class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen, val maxHealth: Int) extends Entity(animations, 48, 0) {
   var stateTime: Float = 0
-  val maxHealth = 20
   var health = maxHealth
   
   override def act(delta: Float) {
