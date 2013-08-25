@@ -28,7 +28,10 @@ class Level(val mapWidth: Int, val mapHeight: Int, tileMap: Array[Int]) extends 
   def getTile(x: Int, y: Int): Int = if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) tileMap(x + mapWidth * y) else Tile.EMPTY
   def unitToMap(pair: (Float, Float)) = (floor(pair._1/Tile.TILE_SIZE), floor(pair._2/Tile.TILE_SIZE))
 
-  def collidesWith(x: Float, y: Float, tileType: Int): Boolean = getTile(floor(x), floor(y)) == tileType
+  def collidesWith(x: Float, y: Float, tileType: Int): Boolean = {
+    val mapCoord = unitToMap((x, y))
+    getTile(mapCoord._1, mapCoord._2) == tileType
+  }
 
   def collidesWith(rect: Rectangle, tileType: Int): Boolean =  {
     val tlc = unitToMap(rect.getX, rect.getY+rect.getHeight)

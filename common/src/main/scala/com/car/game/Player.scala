@@ -12,18 +12,26 @@ import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.Pixmap.Format
 import com.car.l.screens.LevelTestScreen
+import com.badlogic.gdx.utils.Pool
 
 class PlayerProcessor(player: Player) extends InputProcessor {
   val moveKeys = Map(Keys.W -> 0, Keys.D -> 1, Keys.S -> 2, Keys.A -> 3)
-  val shootKeys = Map(Keys.UP -> 0, Keys.RIGHT -> 1, Keys.DOWN -> 2, Keys.LEFT -> 3)
+  val shootKeys = Map(Keys.UP -> 1, Keys.RIGHT -> 2, Keys.DOWN -> 4, Keys.LEFT -> 8)
 
   override def keyDown(keycode: Int): Boolean = {
     if (moveKeys.contains(keycode)) player.movement(moveKeys(keycode)) = true
+    if (shootKeys.contains(keycode)){
+      player.shootDir += shootKeys(keycode)
+      
+    }
     true
   }
 
   override def keyUp(keycode: Int): Boolean = {
     if (moveKeys.contains(keycode)) player.movement(moveKeys(keycode)) = false
+    if (shootKeys.contains(keycode)){
+      player.shootDir -= shootKeys(keycode)
+    }
     true
   }
 
@@ -38,17 +46,19 @@ class PlayerProcessor(player: Player) extends InputProcessor {
 
 class Player(animations: Map[String, Animation], var screen: LevelTestScreen) extends Entity(animations, 48, 7) {
   val SPEED = 5
-  val WEAPON_COOLDOWN = 20
+  val WEAPON_COOLDOWN = 0.2f
   var movement = Array(false, false, false, false)
   var shootDir = 0
-  var shootFlag = false
-  var shootCooldown = 0
+  var shootCooldown = 0f
+  
   
   setPosition(4*48, 4*48)
   
   override def act(delta: Float) {
     if (movement(0) || movement(1) || movement(2) || movement(3)) swapAnimation("walk")
     else swapAnimation("idle")
+    
+    shootCooldown += delta
     
     super.act(delta)
     var deltaV = new Vector2(0, 0)
@@ -76,6 +86,22 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
     scan(0.05f, new Vector2(deltaV.x, 0).nor, deltaV.len)
     scan(0.05f, new Vector2(0, deltaV.y).nor, deltaV.len)
+    
+    def spawnShot(dir: Int){
+      val shot = ShotPool.getShot(screen)
+      shot.setPosition(getX + 48/2, getY + 48/2)
+      var shotV: Vector2 = new Vector2(0, 0)
+      if((1 & shootDir) > 0) shotV.add(0, 1)
+      if((2 & shootDir) > 0) shotV.add(1, 0)
+      if((4 & shootDir) > 0) shotV.add(0, -1)
+      if((8 & shootDir) > 0) shotV.add(-1, 0)
+      shot.deltaV = shotV.nor.scl(SPEED*3)
+    }
+    
+    if(shootDir > 0 && shootCooldown > WEAPON_COOLDOWN){
+      spawnShot(shootDir)
+      shootCooldown = 0
+    }
   }
 
   override def draw(batch: SpriteBatch, parentAlpha: Float) {

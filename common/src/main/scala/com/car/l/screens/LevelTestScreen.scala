@@ -26,8 +26,9 @@ import com.car.game.Entity
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
-
+    
   lazy val ui = new GameUI
+  
   var level: Option[Level] = None
   val player = new Player(Map("walk" -> new Animation(0.10f, assets.creatureAtlas.createSprites("walk_u"), Animation.LOOP),
     "idle" -> new Animation(1, assets.creatureAtlas.createSprite("walk_u", 2))), this)
