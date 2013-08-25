@@ -36,7 +36,7 @@ class PlayerProcessor(player: Player) extends InputProcessor {
   
 }
 
-class Player(animations: Map[String, Animation], var level: Level) extends Entity(animations) {
+class Player(animations: Map[String, Animation]) extends Entity(animations) {
   val SPEED = 5
   val PLAYER_SIZE = 32
   val BOX_OFFSET = 5
@@ -60,9 +60,9 @@ class Player(animations: Map[String, Animation], var level: Level) extends Entit
     setPosition(getX + deltaV.x, getY + deltaV.y)
     boundingBox.set(getX + BOX_OFFSET, getY + BOX_OFFSET, PLAYER_SIZE - 2 * BOX_OFFSET, PLAYER_SIZE - 2 * BOX_OFFSET)
     
-    if(level.collides(boundingBox)){
-      println("COLLIDES")
-    }
+//    if(level.collides(boundingBox)){
+//      println("COLLIDES")
+//    }
   }
   
   override def draw(batch: SpriteBatch, parentAlpha: Float){

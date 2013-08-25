@@ -17,6 +17,7 @@ class Assets {
   lazy val uiAtlas = manager.get("images/ui.pack", classOf[TextureAtlas])
   lazy val creatureAtlas = manager.get("images/creatures.pack", classOf[TextureAtlas])
   lazy val tileAtlas = manager.get("images/tiles.pack", classOf[TextureAtlas])
+  
   val font: BitmapFont = new BitmapFont(Gdx.files.classpath("images/ronda32_bold.fnt"), false)
 
   val skin: Skin = {

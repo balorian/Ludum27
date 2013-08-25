@@ -36,6 +36,8 @@ class TransitionScreen(game: LudumGame) extends AbstractScreen(game) {
       delay(FADE_DELAY), run(new Runnable() {
         def run() {
           current.get.pause()
+          current.get.outOf
+          next.get.into
           next.get.resume()
           toDraw = next
         }
