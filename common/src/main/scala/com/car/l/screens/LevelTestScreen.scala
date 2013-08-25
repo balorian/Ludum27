@@ -26,6 +26,7 @@ import com.car.game.Entity
 import com.car.game.SoulShard
 import scala.util.Random
 import com.car.game.Meat
+import com.car.game.Enemy
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
@@ -60,7 +61,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
   override def into() {
     Gdx.app.debug(LOG_TAG, "GOING TO LEVEL 1")
-    setLevel("level1")
+    setLevel("test1")
   }
 
   override def inputProcessor = {
@@ -73,14 +74,6 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   override def render(delta: Float) {
     gl.glClearColor(0, 0, 0, 1)
     gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
-
-    val r = new Random
-    if (r.nextFloat < 0.01) {
-      createSouldShard(player.getX, player.getY)
-    }
-    if (r.nextFloat < 0.01) {
-      createMeat(player.getX, player.getY)
-    }
 
     //    spawnList foreach (sp => sp.act(delta))
     stage.act()
@@ -97,6 +90,10 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   }
 
   def spawnOnPoint(point: SpawnPoint) {
+    val e = new Enemy(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("skeleton"), Animation.LOOP)), this)
+    e.setPosition(point.getX(), point.getY())
+    stage.addActor(e)
+
     Gdx.app.debug(LOG_TAG, "Spawn on " + point.getX() + ", " + point.getY())
   }
 
