@@ -21,8 +21,8 @@ import com.badlogic.gdx.graphics.GL10
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.car.game.SpawnPoint
-
 import scala.collection.mutable.ListBuffer
+import com.car.game.Entity
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
@@ -35,11 +35,13 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   lazy val bgImage = new Image(sprite)
   val bg = Assets.assets.tileAtlas.createSprite("bg")
 
+  val collectablesList: ListBuffer[Entity] = new ListBuffer
   val spawnList: ListBuffer[SpawnPoint] = new ListBuffer
 
   def setLevel(key: String) {
     def clearLists() {
       spawnList.dropRight(0)
+      collectablesList.dropRight(0)
     }
 
     level = Some(LevelLoader.load(key, this))
@@ -48,6 +50,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.addActor(bgImage)
     stage.addActor(level.get)
     spawnList foreach (stage.addActor(_))
+    collectablesList foreach (stage.addActor(_))
     stage.addActor(player)
   }
 

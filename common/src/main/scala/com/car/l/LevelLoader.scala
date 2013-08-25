@@ -9,6 +9,7 @@ import com.car.game.Tile
 import com.car.l.screens.LevelTestScreen
 import com.car.game.SpawnPoint
 import com.badlogic.gdx.graphics.g2d.Animation
+import com.car.game.Key
 
 object LevelLoader {
   val LOG_TAG = "LevelLoader"
@@ -25,11 +26,17 @@ object LevelLoader {
   def load(key: String, screen: LevelTestScreen): Level = {
     def createSpawn(x: Int, y: Int): SpawnPoint = {
       val sp = new SpawnPoint(Map("idle" -> new Animation(0.10f, assets.creatureAtlas.createSprites("spawn"), Animation.LOOP)), screen)
-      sp.setPosition(x * Tile.TILE_SIZE, y * Tile.TILE_SIZE)
+      sp.setPosition(x, y)
       sp
     }
 
-    def spawnKey(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Key at " + i + "/" + j)
+    def createKey(x: Int, y: Int): Key = {
+      val key = new Key(Map("idle" -> new Animation(0.10f, assets.creatureAtlas.createSprites("key"), Animation.LOOP)))
+      key.setPosition(x, y)
+      key
+    }
+
+    def spawnKey(i: Int, j: Int) = screen.collectablesList.append(createKey(i, j))
     def spawnDoor(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Door at " + i + "/" + j)
     def spawnPoint1(i: Int, j: Int) = screen.spawnList.append(createSpawn(i, j))
     def spawnPoint2(i: Int, j: Int) = screen.spawnList.append(createSpawn(i, j))
@@ -45,8 +52,8 @@ object LevelLoader {
 
       def flip(j: Int) = height - (j + 1)
 
-      val x = i
-      val y = flip(j)
+      val x = i * Tile.TILE_SIZE
+      val y = flip(j) * Tile.TILE_SIZE
       val index = flip(j) * width + i
 
       pixel match {
