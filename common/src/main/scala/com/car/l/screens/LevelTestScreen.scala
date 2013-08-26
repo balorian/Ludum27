@@ -52,6 +52,8 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val blockSet: HashSet[BreakBlock] = HashSet.empty
   val spawnSet: HashSet[SpawnPoint] = HashSet.empty
   val enemySet: HashSet[Enemy] = HashSet.empty
+  
+  var time = 0f
 
   def setLevel(key: String) {
     def clearLists() {
@@ -95,6 +97,8 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   }
 
   override def render(delta: Float) {
+    time += delta
+    
     gl.glClearColor(0, 0, 0, 1)
     gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
 
