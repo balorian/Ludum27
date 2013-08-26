@@ -33,6 +33,8 @@ import com.car.game.EnemyPool
 import com.car.game.Potion
 import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.scenes.scene2d.ui.Label
+import com.badlogic.gdx.scenes.scene2d.actions.Actions._
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
@@ -52,7 +54,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val blockSet: HashSet[BreakBlock] = HashSet.empty
   val spawnSet: HashSet[SpawnPoint] = HashSet.empty
   val enemySet: HashSet[Enemy] = HashSet.empty
-  
+
   var time = 0f
 
   def setLevel(key: String) {
@@ -98,7 +100,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
   override def render(delta: Float) {
     time += delta
-    
+
     gl.glClearColor(0, 0, 0, 1)
     gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
 
@@ -107,7 +109,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.act()
     cameraControl()
     stage.draw()
-    
+
     ui.update
     ui.render(delta)
   }
@@ -154,5 +156,15 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     var r = false
     doorSet foreach (block => if (block.collidesWith(player)) { r = true; block.collidedWith(player) })
     r
+  }
+
+  def displayMessage(text: String, x: Float, y: Float) {
+    println("text to display " + text + " " + x + "," + y)
+    
+    val msg = new Label(text, assets.skin)
+    msg.setPosition(x - msg.getWidth()/2, y)
+    val msgTime = 6f
+    msg.addAction(sequence(parallel(fadeOut(time), moveTo(x- msg.getWidth()/2, y + 100, time))))
+    stage.addActor(msg)
   }
 }
