@@ -43,7 +43,7 @@ class SplashScreen(game: LudumGame) extends AbstractScreen(game) {
 
     if (done && !drawOnly) {
       drawOnly = true
-      this.game.transitionToScreen(this.game.testScreen)
+      this.game.transitionToScreen(this.game.mainMenuScreen)
     }
 
     super.render(delta)
