@@ -88,32 +88,13 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     if (movement(3)) { deltaV.add(-1, 0); if (movement(0)) setRotation(45) else if (movement(2)) setRotation(135) else setRotation(90) }
     deltaV.nor().scl(SPEED)
 
-    def scan(step: Float, dir: Vector2, length: Float) {
-      val newLength = length - step
-      val oldDir = new Vector2(dir.x, dir.y)
-      if (length > 0) {
-        val oldPos = (getX, getY)
-        val scl = dir.scl(step)
-        setPosition(scl.x + getX, scl.y + getY)
-        val spawnCol = !(screen.blockSet.forall(block => !(block.collidesWith(this)))) || !(screen.spawnSet.forall(spawn => !(spawn.collidesWith(this))))
-        println(screen.spawnSet.forall(spawn => !(spawn.collidesWith(this))))
-
-        if ((screen.level.get.collidesWith(boundingBox, Tile.WALL) || screen.level.get.collidesWith(boundingBox, Tile.WATER) || screen.collidesWithBlock(this)) || spawnCol)
-          setPosition(oldPos._1, oldPos._2)
-        else if (newLength < step)
-          scan(newLength, oldDir, 0)
-        else
-          scan(step, oldDir, newLength)
-      }
-    }
-
     scan(0.05f, new Vector2(deltaV.x, 0).nor, deltaV.len)
     scan(0.05f, new Vector2(0, deltaV.y).nor, deltaV.len)
 
     if (screen.level.get.collidesWith(boundingBox, Tile.STAIRS_DOWN)) {
       screen.game.transitionToScreen(screen.game.levelEndScreen)
     }
-
+    
     def spawnShot(dir: Int) {
       val shot = ShotPool.getShot(screen)
       var shotV: Vector2 = new Vector2(0, 0)
@@ -131,14 +112,10 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
       shootCooldown = 0
     }
   }
-
-  override def draw(batch: SpriteBatch, parentAlpha: Float) {
-    super.draw(batch, parentAlpha)
-    val pixmap = new Pixmap(34, 34, Format.RGBA8888);
-    pixmap.setColor(1, 0, 0, 1f);
-    pixmap.drawRectangle(0, 0, 34, 34);
-    val texmex = new Texture(pixmap);
-    batch.draw(texmex, boundingBox.x, boundingBox.y)
+  
+  override def collides(): Boolean = {
+    val spawnCol = !(screen.blockSet.forall(block => !(block.collidesWith(this)))) || !(screen.spawnSet.forall(spawn => !(spawn.collidesWith(this))))
+    (screen.level.get.collidesWith(boundingBox, Tile.WALL) || screen.level.get.collidesWith(boundingBox, Tile.WATER) || screen.collidesWithBlock(this)) || spawnCol
   }
 
 }

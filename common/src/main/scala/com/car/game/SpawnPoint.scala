@@ -26,4 +26,6 @@ class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen
       screen.spawnSet.remove(this)
     }
   }
+  
+  override def collides() = false
 }

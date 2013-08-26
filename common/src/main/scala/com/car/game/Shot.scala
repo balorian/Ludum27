@@ -42,6 +42,7 @@ class Shot(screen: LevelTestScreen, image: TextureRegion) extends Actor{
     
     screen.spawnSet.foreach(spoint => if (spoint.contains(getX, getY)) {spoint.health -= damage; assets.hit.play(); ShotPool.returnShot(this)})
     screen.blockSet.foreach(block => if (block.contains(getX, getY)) {block.health -= damage; assets.hit.play(); ShotPool.returnShot(this)})
+    screen.doorSet.foreach(door => if (door.contains(getX, getY)) {ShotPool.returnShot(this)})
     
     if(screen.level.get.collidesWith(getX+image.getRegionWidth/2, getY+image.getRegionHeight/2, Tile.WALL)){
       ShotPool.returnShot(this)

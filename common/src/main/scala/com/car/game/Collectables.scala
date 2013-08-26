@@ -26,6 +26,8 @@ abstract class Collectable(
 
   def pickup(player: Player) = {
   }
+  
+  override def collides() = false
 }
 
 class Key(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "key") {

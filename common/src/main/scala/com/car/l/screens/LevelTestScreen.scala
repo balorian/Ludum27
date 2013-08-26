@@ -29,6 +29,7 @@ import com.car.game.Meat
 import com.car.game.Enemy
 import scala.collection.mutable.HashSet
 import com.car.game.BreakBlock
+import com.car.game.EnemyPool
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
@@ -46,6 +47,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val doorSet: HashSet[Entity] = HashSet.empty
   val blockSet: HashSet[BreakBlock] = HashSet.empty
   val spawnSet: HashSet[SpawnPoint] = HashSet.empty
+  val enemySet: HashSet[Enemy] = HashSet.empty
 
   def setLevel(key: String) {
     def clearLists() {
@@ -100,9 +102,9 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   }
 
   def spawnOnPoint(point: SpawnPoint) {
-    val e = new Enemy(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("skeleton"), Animation.LOOP)), this)
-    e.setPosition(point.getX(), point.getY())
-    stage.addActor(e)
+    val e = EnemyPool.getEnemy(this)
+    e.setPosition(point.getX()-48, point.getY())
+    if(e collides) EnemyPool.returnEnemy(enemySet, e)
     Gdx.app.debug(LOG_TAG, "Spawn on " + point.getX() + ", " + point.getY())
   }
 
