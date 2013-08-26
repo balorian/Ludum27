@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format
 import com.car.l.screens.LevelTestScreen
 import com.badlogic.gdx.utils.Pool
 import com.badlogic.gdx.math.MathUtils
+import com.car.l.Assets.assets
 
 class PlayerProcessor(player: Player) extends InputProcessor {
   val moveKeys = Map(Keys.W -> 0, Keys.D -> 1, Keys.S -> 2, Keys.A -> 3)
@@ -69,6 +70,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   
   def modHealth(delta: Int) {
     currentHealth = MathUtils.clamp(currentHealth+ delta, 0, maxHealth)
+    if(delta < 0 ) assets.playSound("hurt")
   }
   
   def newLevel(level: Level) {
