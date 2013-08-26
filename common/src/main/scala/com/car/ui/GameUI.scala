@@ -47,7 +47,7 @@ class GameUI(val player: Player) {
     keyLabel.setText(GameUI.KEYS + player.keys)
 
     spiritBar.ratio = player.currentSpirit / player.maxSpirit
-    healthBar.ratio = player.currentHealth / player.maxHealth
+    healthBar.ratio = player.currentHealth.toFloat / player.maxHealth.toFloat
   }
 
   def render(delta: Float) {
