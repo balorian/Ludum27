@@ -73,9 +73,8 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
     deltaV.nor.scl(speed)
     scan(0.5f, new Vector2(deltaV.x, 0).nor, deltaV.len)
     scan(0.5f, new Vector2(0, deltaV.y).nor, deltaV.len)
-
-    setRotation((deltaV.angle() + 270).round/2 * 2)
-
+    
+    setRotation(deltaV.angle() + 270)
   }
 
   override def collides(): Boolean = {
