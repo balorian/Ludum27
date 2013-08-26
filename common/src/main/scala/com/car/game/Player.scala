@@ -16,6 +16,9 @@ import com.badlogic.gdx.utils.Pool
 import com.badlogic.gdx.math.MathUtils
 import com.car.l.Assets.assets
 import com.car.l.screens.GameOverScreen
+import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.car.l.screens.LevelTestScreen
 
 class PlayerProcessor(player: Player) extends InputProcessor {
   val moveKeys = Map(Keys.W -> 0, Keys.D -> 1, Keys.S -> 2, Keys.A -> 3)
@@ -34,6 +37,9 @@ class PlayerProcessor(player: Player) extends InputProcessor {
     if (moveKeys.contains(keycode)) player.movement(moveKeys(keycode)) = false
     if (shootKeys.contains(keycode)) {
       player.shootDir -= shootKeys(keycode)
+    }
+    if (Keys.SPACE == keycode) {
+      player.usePotion
     }
     true
   }
@@ -82,8 +88,8 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     shootCooldown = 0f
     movement = Array(false, false, false, false)
   }
-  
-  def reset(){
+
+  def reset() {
     currentSpirit = maxSpirit
     currentHealth = maxHealth
     keys = 0
@@ -91,14 +97,22 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     shootCooldown = 0f
     movement = Array(false, false, false, false)
     score = 0
+    potion = 0
+  }
+
+  def usePotion() {
+    if (potion > 0) {
+      screen.enemySet.foreach(enemy => if (scala.math.max(getX - enemy.getX, getY - enemy.getY) < 300) enemy.health -= 20)
+      screen.stage.addActor(new Fader(screen))
+      potion -= 1
+    }
   }
 
   override def act(delta: Float) {
-    if(!(currentAnimation == "throw" && !animations(currentAnimation).isAnimationFinished(animationTimer))){
+    if (!(currentAnimation == "throw" && !animations(currentAnimation).isAnimationFinished(animationTimer))) {
       if (movement(0) || movement(1) || movement(2) || movement(3)) swapAnimation("walk")
       else swapAnimation("idle")
     }
-    
 
     shootCooldown += delta
 
@@ -125,13 +139,13 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
       screen.game.transitionToScreen(screen.game.gameOverScreen)
       assets.playSound("death")
     }
-    
-    screen.enemySet.foreach(enemy => 
+
+    screen.enemySet.foreach(enemy =>
       if (enemy.collidesWith(this)) {
-    	EnemyPool.returnEnemy(screen.enemySet, enemy)
-    	modHealth(-enemy.damage)
+        EnemyPool.returnEnemy(screen.enemySet, enemy)
+        modHealth(-enemy.damage)
       })
-    
+
     def spawnShot(dir: Int) {
       swapAnimation("throw")
       assets.playSound("throw")
@@ -151,10 +165,34 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
       shootCooldown = 0
     }
   }
-  
+
   override def collides(): Boolean = {
     val spawnCol = !(screen.blockSet.forall(block => !(block.collidesWith(this)))) || !(screen.spawnSet.forall(spawn => !(spawn.collidesWith(this))))
     (screen.level.get.collidesWith(boundingBox, Tile.WALL) || screen.level.get.collidesWith(boundingBox, Tile.WATER) || screen.collidesWithBlock(this)) || spawnCol
   }
+}
 
+class Fader(var screen: LevelTestScreen) extends Actor {
+  val FADE_TIME = 0.5f
+  var fadeTimer = 0f
+  val whiteTex = {
+    val pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888)
+    pixmap.setColor(1, 1, 1, 1f)
+    pixmap.fill()
+    new Texture(pixmap)
+  }  
+  
+  override def act(delta: Float){
+    fadeTimer += delta
+    if(fadeTimer > FADE_TIME){
+      remove
+    }
+  }
+  
+  override def draw(batch: SpriteBatch, parentAlpha: Float){
+    batch.setColor(1, 1, 1, 1-fadeTimer*2)
+    batch.draw(whiteTex, 0, 0, screen.player.getX + 400, screen.player.getY + 400)
+    batch.setColor(Color.WHITE)
+  }
+  
 }
