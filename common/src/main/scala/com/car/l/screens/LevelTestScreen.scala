@@ -37,9 +37,9 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   lazy val ui = new GameUI(player)
 
   var level: Option[Level] = None
-  val player = new Player(Map("walk" -> new Animation(0.10f, assets.creatureAtlas.createSprites("walk_u"), Animation.LOOP),
-                              "idle" -> new Animation(1, assets.creatureAtlas.createSprite("walk_u", 2)),
-                              "throw" -> new Animation(0.05f, assets.creatureAtlas.createSprites("throw"))), this)
+  val player = new Player(Map("walk" -> new Animation(0.05f, assets.creatureAtlas.createSprites("walk_u"), Animation.LOOP),
+    "idle" -> new Animation(1, assets.creatureAtlas.createSprite("walk_u", 2)),
+    "throw" -> new Animation(0.05f, assets.creatureAtlas.createSprites("throw"))), this)
   lazy val sprite = Assets.assets.tileAtlas.createSprite("bg")
   lazy val bgImage = new Image(sprite)
   val bg = Assets.assets.tileAtlas.createSprite("bg")
@@ -111,20 +111,21 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     e.setPosition(point.getX - 48, point.getY)
     println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
     if (e collides) {
-      e.setPosition(point.getX, point.getY-48)
+      e.setPosition(point.getX, point.getY - 48)
       println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
-      if (e collides){
+      if (e collides) {
         println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
-        e.setPosition(point.getX+48, point.getY)
-        if (e collides){
+        e.setPosition(point.getX + 48, point.getY)
+        if (e collides) {
           println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
-          e.setPosition(point.getX, point.getY+48)
-        }
-        else {
-          println("SPAWN " + point.id + " FAILED")
-          EnemyPool.returnEnemy(enemySet, e)}
+          e.setPosition(point.getX, point.getY + 48)
+          if (e collides) {
+            println("SPAWN " + point.id + " FAILED")
+            EnemyPool.returnEnemy(enemySet, e)
+          }
         }
       }
+    }
   }
 
   def createSoulShard(x: Float, y: Float) = {
