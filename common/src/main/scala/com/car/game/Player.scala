@@ -61,12 +61,12 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   var shootCooldown = 0f
 
   var superSayan = false
-  
-  def turnSayan(b: Boolean){
+
+  def turnSayan(b: Boolean) {
     superSayan = b
     screen.ui.superSayan(superSayan)
   }
-  
+
   var powerTimer = 45f
 
   val maxHealth = 100
@@ -145,13 +145,11 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     scan(0.05f, new Vector2(0, deltaV.y).nor, deltaV.len)
 
     if (screen.level.get.collidesWith(boundingBox, Tile.STAIRS_DOWN)) {
-      if (superSayan) {
-        screen.game.transitionToScreen(screen.game.gameOverScreen);
-        screen.game.gameOverScreen.setMessage("You have reclaimed your soul!")
-      } else {
-        assets.playSound("steps");
-        screen.game.transitionToScreen(screen.game.levelEndScreen)
-      }
+      assets.playSound("steps");
+      screen.game.transitionToScreen(screen.game.levelEndScreen)
+    } else if (screen.level.get.collidesWith(boundingBox, Tile.STAIRS_UP) && superSayan) {
+      screen.game.transitionToScreen(screen.game.gameOverScreen);
+      screen.game.gameOverScreen.setMessage("You have reclaimed your soul!")
     }
 
     if (currentSpirit == 0 || currentHealth == 0) {
