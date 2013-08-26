@@ -41,7 +41,7 @@ class Potion(animations: Map[String, Animation], screen: LevelTestScreen) extend
 }
 
 class PowerPotion(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "potion") {
-  override def pickup(player: Player) = { player.powerTimer = 0}
+  override def pickup(player: Player) = { player.powerTimer = 0 }
 }
 
 class SoulShard(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 24, 2, screen, screen.collectablesSet, "soul") {
@@ -78,5 +78,9 @@ class Door(animations: Map[String, Animation], screen: LevelTestScreen) extends 
 }
 
 class SayanOrb(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 64, 20, screen, screen.collectablesSet, "soul_orb") {
-  override def pickup(player: Player) = player.turnSayan(true)
+  override def pickup(player: Player) = {
+    player.turnSayan(true);
+    val coords = player.center
+    screen.displayMessage("Finally I have reclaimed my soul!", coords.x, coords.y)
+  }
 }
