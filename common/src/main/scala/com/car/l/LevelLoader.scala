@@ -26,8 +26,6 @@ object LevelLoader {
   val SPAWN_2 = 0x287D00FF
   val BREAKABLE_WALL = 0xD67FFFFF
   
-  var cid = 0
-
   val levels = List("level0", "level1", "level2")
   def nextLevelFrom(current: String): String = {
     levels.takeRight(levels.length - 1 - levels.indexOf(current)).head
@@ -37,8 +35,7 @@ object LevelLoader {
     def createSpawn1(x: Int, y: Int): SpawnPoint = {
       val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn"), Animation.LOOP),
         "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn_damaged"), Animation.LOOP)),
-        screen, 20, 'skeleton, cid)
-      cid += 1
+        screen, 20, 'skeleton)
       sp.setPosition(x, y)
       sp
     }
@@ -46,8 +43,7 @@ object LevelLoader {
     def createSpawn2(x: Int, y: Int): SpawnPoint = {
       val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn2"), Animation.LOOP),
         "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn2_damaged"), Animation.LOOP)),
-        screen, 40, 'ghost, cid)
-      cid += 1
+        screen, 40, 'ghost)
       sp.setPosition(x, y)
       sp
     }

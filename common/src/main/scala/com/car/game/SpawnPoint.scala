@@ -7,7 +7,7 @@ object SpawnPoint {
   val SPAWN_TIME = 3f
 }
 
-class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen, val maxHealth: Int, val enemyType: Symbol, val id: Int) extends Entity(animations, 48, 0) {
+class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen, val maxHealth: Int, val enemyType: Symbol) extends Entity(animations, 48, 0) {
   var stateTime: Float = 0
   var health = maxHealth
 
@@ -19,7 +19,6 @@ class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen
     stateTime += delta
     if (stateTime >= SpawnPoint.SPAWN_TIME) {
       stateTime = 0
-      println("SPAWNER " + id + " ATTEMPTING TO SPAWN")
       screen.spawnOnPoint(this)
     }
     if (health <= 0) {
