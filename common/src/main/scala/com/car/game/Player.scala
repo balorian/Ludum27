@@ -62,10 +62,18 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   var keys = 0
 
   setPosition(4 * 48, 4 * 48)
-
+  
+  def modSpirit(delta: Float) {
+    currentSpirit = MathUtils.clamp(currentSpirit + delta, 0, maxSpirit)
+  }
+  
+  def modHealth(delta: Int) {
+    currentHealth = MathUtils.clamp(currentHealth+ delta, 0, maxHealth)
+  }
+  
   def newLevel(level: Level) {
     setPosition(level.startCoord._1, level.startCoord._2)
-    currentSpirit = MathUtils.clamp(currentSpirit + 2, 0, maxSpirit)
+    modSpirit(4f)
     shootDir = 0
     shootCooldown = 0f
     movement = Array(false, false, false, false)
@@ -79,7 +87,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
     super.act(delta)
 
-    currentSpirit -= delta
+    modSpirit(-delta)
 
     var deltaV = new Vector2(0, 0)
     if (movement(0)) { deltaV.add(0, 1); setRotation(0) }
@@ -96,7 +104,6 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
         val scl = dir.scl(step)
         setPosition(scl.x + getX, scl.y + getY)
         val spawnCol = !(screen.blockSet.forall(block => !(block.collidesWith(this)))) || !(screen.spawnSet.forall(spawn => !(spawn.collidesWith(this))))
-        println(screen.spawnSet.forall(spawn => !(spawn.collidesWith(this))))
 
         if ((screen.level.get.collidesWith(boundingBox, Tile.WALL) || screen.level.get.collidesWith(boundingBox, Tile.WATER) || screen.collidesWithBlock(this)) || spawnCol)
           setPosition(oldPos._1, oldPos._2)

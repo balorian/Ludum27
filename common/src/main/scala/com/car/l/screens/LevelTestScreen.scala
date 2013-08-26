@@ -59,6 +59,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
     level = Some(LevelLoader.load(key, this))
     player.newLevel(level.get)
+    ui.update
     cameraControl
 
     stage.clear()
@@ -103,7 +104,6 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     val e = new Enemy(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("skeleton"), Animation.LOOP)), this)
     e.setPosition(point.getX(), point.getY())
     stage.addActor(e)
-    Gdx.app.debug(LOG_TAG, "Spawn on " + point.getX() + ", " + point.getY())
   }
 
   def createSoulShard(x: Float, y: Float) = {
