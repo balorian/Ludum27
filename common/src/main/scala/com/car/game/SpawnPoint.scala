@@ -7,7 +7,7 @@ object SpawnPoint {
   val SPAWN_TIME = 5f
 }
 
-class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen, val maxHealth: Int) extends Entity(animations, 48, 0) {
+class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen, val maxHealth: Int, val enemyType: Symbol) extends Entity(animations, 48, 0) {
   var stateTime: Float = 0
   var health = maxHealth
   

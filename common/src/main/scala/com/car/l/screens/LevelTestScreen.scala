@@ -58,7 +58,9 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     }
 
     clearLists
+    println("ENEMIES BEFORE: " + enemySet)
     enemySet.foreach(enemy => EnemyPool.returnEnemy(enemySet, enemy))
+    println("ENEMIES AFTER: " + enemySet)
 
     level = Some(LevelLoader.load(key, this))
     player.newLevel(level.get)
@@ -104,8 +106,12 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   }
 
   def spawnOnPoint(point: SpawnPoint) {
-    val e = EnemyPool.getEnemy(this)
-    e.setPosition(point.getX()-48, point.getY())
+    val e = if (point.enemyType == 'skeleton) EnemyPool.getEnemy(this, 'skeleton) else EnemyPool.getEnemy(this, 'ghost)
+    println("SPAWNING AT :" + point.getX + " " + point.getY)
+    e.setPosition(point.getX-48, point.getY)
+    //if(e collides) e.setPosition(point.getX, point.getY-48)
+    //if(e collides) e.setPosition(point.getX+48, point.getY)
+    //if(e collides) e.setPosition(point.getX, point.getY+48)
     if(e collides) EnemyPool.returnEnemy(enemySet, e)
   }
 
