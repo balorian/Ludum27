@@ -57,7 +57,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   val maxHealth = 100
   var currentHealth = maxHealth
 
-  val maxSpirit = 120f
+  val maxSpirit = 10f
   var currentSpirit: Float = maxSpirit
 
   var score = 0

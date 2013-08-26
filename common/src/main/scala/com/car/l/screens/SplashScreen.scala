@@ -33,7 +33,7 @@ class SplashScreen(game: LudumGame) extends AbstractScreen(game) {
 
     if (manager.update() && !done) {
       done = true;
-      game.testScreen.setLevel("test1")
+      game.testScreen.setLevel("level0")
       Gdx.app.debug("Splash", "Loading done!");
     } else if (!done) {
       // display loading information
