@@ -12,9 +12,10 @@ object EnemyPool {
   var freeEnemies: Stack[Enemy] = new Stack[Enemy]()
 
   def getEnemy(screen: LevelTestScreen, enemyType: Symbol): Enemy = {
-    println("GETTING ENEMY, AMOUNT IN POOL: " + freeEnemies.size)
-    if (freeEnemies.isEmpty) new Enemy(Map("skeleton" -> new Animation(0.20f, assets.creatureAtlas.createSprites("skeleton"), Animation.LOOP),
-                                           "ghost" -> new Animation(0.20f, assets.creatureAtlas.createSprites("ghost"))), screen, enemyType)
+    if (freeEnemies.isEmpty) {
+      new Enemy(Map("skeleton" -> new Animation(0.20f, assets.creatureAtlas.createSprites("skeleton"), Animation.LOOP),
+                    "ghost" -> new Animation(0.20f, assets.creatureAtlas.createSprites("ghost"), Animation.LOOP)), screen, enemyType)
+    }
     else {
       val ret = freeEnemies.pop()
       ret.setVisible(true)
@@ -41,6 +42,8 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
   var damage: Int = 0
   var health: Int = 0
   setType(enemyType)
+  screen.enemySet.add(this)
+  screen.stage.addActor(this)
 
   def setType(enemyType: Symbol){
 	enemyType match{
