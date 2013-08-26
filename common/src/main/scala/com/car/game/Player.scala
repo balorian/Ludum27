@@ -97,14 +97,14 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     shootCooldown = 0f
     movement = Array(false, false, false, false)
     score = 0
-    potion = 0
+    potions = 0
   }
 
   def usePotion() {
-    if (potion > 0) {
+    if (potions > 0) {
       screen.enemySet.foreach(enemy => if (scala.math.max(getX - enemy.getX, getY - enemy.getY) < 300) enemy.health -= 20)
       screen.stage.addActor(new Fader(screen))
-      potion -= 1
+      potions -= 1
     }
   }
 

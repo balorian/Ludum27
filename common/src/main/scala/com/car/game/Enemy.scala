@@ -39,7 +39,7 @@ object EnemyPool {
   }
 
   def drop(screen: LevelTestScreen, x: Float, y: Float) {
-    if (random.nextFloat <= 0.03) { screen.createPotion(x, y) }
+    if (random.nextFloat <= 0.5) { screen.createPotion(x, y) }
     else screen.createSoulShard(x, y)
   }
 }
