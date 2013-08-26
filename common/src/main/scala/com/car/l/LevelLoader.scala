@@ -18,6 +18,7 @@ import com.car.game.Meat
 import com.car.game.Potion
 import com.car.game.PowerPotion
 import com.car.game.PowerPotion
+import com.car.game.SayanOrb
 
 
 object LevelLoader {
@@ -42,8 +43,9 @@ object LevelLoader {
   var depth = 1
   
   def nextLevelFrom(current: String): String = {
+    val l = levels.takeRight(levels.length - depth).head
     depth += 1
-    levels.takeRight(levels.length - 1 - levels.indexOf(current)).head
+    l
   }
 
   def load(key: String, screen: LevelTestScreen): Level = {

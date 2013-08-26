@@ -59,10 +59,16 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   var movement = Array(false, false, false, false)
   var shootDir = 0
   var shootCooldown = 0f
-  
+
   var superSayan = false
-  var powerTimer = 45f
   
+  def turnSayan(b: Boolean){
+    superSayan = b
+    screen.ui.superSayan(superSayan)
+  }
+  
+  var powerTimer = 45f
+
   val maxHealth = 100
   var currentHealth = maxHealth
 
@@ -77,7 +83,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
   def modSpirit(delta: Float) {
     currentSpirit = MathUtils.clamp(currentSpirit + delta, 0, maxSpirit)
-    if(superSayan){currentSpirit = 1f}
+    if (superSayan) { currentSpirit = 1f }
   }
 
   def modHealth(delta: Int) {
@@ -102,6 +108,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     movement = Array(false, false, false, false)
     score = 0
     potions = 0
+    turnSayan(false)
   }
 
   def usePotion() {
@@ -121,7 +128,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
     shootCooldown += delta
     powerTimer += delta
-    
+
     super.act(delta)
 
     modSpirit(-delta)
@@ -137,8 +144,13 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     scan(0.05f, new Vector2(0, deltaV.y).nor, deltaV.len)
 
     if (screen.level.get.collidesWith(boundingBox, Tile.STAIRS_DOWN)) {
-      assets.playSound("steps")
-      screen.game.transitionToScreen(screen.game.levelEndScreen)
+      if (superSayan) {
+        screen.game.transitionToScreen(screen.game.gameOverScreen);
+        screen.game.gameOverScreen.setMessage("You have reclaimed your soul!")
+      } else {
+        assets.playSound("steps");
+        screen.game.transitionToScreen(screen.game.levelEndScreen)
+      }
     }
 
     if (currentSpirit == 0 || currentHealth == 0) {
@@ -186,17 +198,17 @@ class Fader(var screen: LevelTestScreen) extends Actor {
     pixmap.setColor(1, 1, 1, 1f)
     pixmap.fill()
     new Texture(pixmap)
-  }  
-  
-  override def act(delta: Float){
+  }
+
+  override def act(delta: Float) {
     fadeTimer += delta
-    if(fadeTimer > FADE_TIME){
+    if (fadeTimer > FADE_TIME) {
       remove
     }
   }
-  
-  override def draw(batch: SpriteBatch, parentAlpha: Float){
-    batch.setColor(1, 1, 1, 1-fadeTimer*2)
+
+  override def draw(batch: SpriteBatch, parentAlpha: Float) {
+    batch.setColor(1, 1, 1, 1 - fadeTimer * 2)
     batch.draw(whiteTex, 0, 0, screen.player.getX + 400, screen.player.getY + 400)
     batch.setColor(Color.WHITE)
   }

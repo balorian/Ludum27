@@ -45,4 +45,5 @@ class LudumGame extends Game {
     currentScreen.get.justDraw = false
     setScreen(currentScreen.get)
   }
+  
 }
