@@ -92,8 +92,11 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   }
 
   override def act(delta: Float) {
-    if (movement(0) || movement(1) || movement(2) || movement(3)) swapAnimation("walk")
-    else swapAnimation("idle")
+    if(!(currentAnimation == "throw" && !animations(currentAnimation).isAnimationFinished(animationTimer))){
+      if (movement(0) || movement(1) || movement(2) || movement(3)) swapAnimation("walk")
+      else swapAnimation("idle")
+    }
+    
 
     shootCooldown += delta
 
@@ -127,6 +130,8 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
       })
     
     def spawnShot(dir: Int) {
+      swapAnimation("throw")
+      assets.playSound("throw")
       val shot = ShotPool.getShot(screen)
       var shotV: Vector2 = new Vector2(0, 0)
       if ((1 & shootDir) > 0) shotV.add(0, 1)

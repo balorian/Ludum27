@@ -12,7 +12,9 @@ object EnemyPool {
   var freeEnemies: Stack[Enemy] = new Stack[Enemy]()
 
   def getEnemy(screen: LevelTestScreen, enemyType: Symbol): Enemy = {
-    if (freeEnemies.isEmpty) new Enemy(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("skeleton"), Animation.LOOP)), screen, enemyType)
+    println("GETTING ENEMY, AMOUNT IN POOL: " + freeEnemies.size)
+    if (freeEnemies.isEmpty) new Enemy(Map("skeleton" -> new Animation(0.20f, assets.creatureAtlas.createSprites("skeleton"), Animation.LOOP),
+                                           "ghost" -> new Animation(0.20f, assets.creatureAtlas.createSprites("ghost"))), screen, enemyType)
     else {
       val ret = freeEnemies.pop()
       ret.setVisible(true)
@@ -35,14 +37,19 @@ object EnemyPool {
 }
 
 class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var enemyType: Symbol) extends Entity(animations, 48, 7) {
-  var speed = if(enemyType == 'skeleton) 2.5f else 1.5f
-  var damage = if(enemyType == 'skeleton) 12 else 25
-  var health = if(enemyType == 'skeleton) 7 else 15
+  var speed: Float = 0
+  var damage: Int = 0
+  var health: Int = 0
+  setType(enemyType)
 
   def setType(enemyType: Symbol){
+	enemyType match{
+	  case 'skeleton => swapAnimation("skeleton")
+	  case 'ghost => swapAnimation("ghost")
+	}
     speed = if(enemyType == 'skeleton) 2.5f else 1.5f
-    damage = if(enemyType == 'skeleton) 12 else 25
-    health = if(enemyType == 'skeleton) 7 else 15
+    damage = if(enemyType == 'skeleton) 4 else 9
+    health = if(enemyType == 'skeleton) 7 else 14
   }
   
   override def act(delta: Float) {
@@ -58,7 +65,7 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
     scan(0.5f, new Vector2(deltaV.x, 0).nor, deltaV.len)
     scan(0.5f, new Vector2(0, deltaV.y).nor, deltaV.len)
 
-    setRotation(deltaV.angle() + 270)
+    setRotation((deltaV.angle() + 270).round/2 * 2)
 
   }
 

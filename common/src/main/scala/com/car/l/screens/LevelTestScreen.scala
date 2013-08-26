@@ -38,7 +38,8 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
   var level: Option[Level] = None
   val player = new Player(Map("walk" -> new Animation(0.10f, assets.creatureAtlas.createSprites("walk_u"), Animation.LOOP),
-    "idle" -> new Animation(1, assets.creatureAtlas.createSprite("walk_u", 2))), this)
+                              "idle" -> new Animation(1, assets.creatureAtlas.createSprite("walk_u", 2)),
+                              "throw" -> new Animation(0.05f, assets.creatureAtlas.createSprites("throw"))), this)
   lazy val sprite = Assets.assets.tileAtlas.createSprite("bg")
   lazy val bgImage = new Image(sprite)
   val bg = Assets.assets.tileAtlas.createSprite("bg")
@@ -55,12 +56,11 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
       collectablesSet.clear
       doorSet.clear
       blockSet.clear
+      enemySet.clear
     }
 
-    clearLists
-    println("ENEMIES BEFORE: " + enemySet)
     enemySet.foreach(enemy => EnemyPool.returnEnemy(enemySet, enemy))
-    println("ENEMIES AFTER: " + enemySet)
+    clearLists
 
     level = Some(LevelLoader.load(key, this))
     player.newLevel(level.get)
@@ -107,12 +107,24 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
   def spawnOnPoint(point: SpawnPoint) {
     val e = if (point.enemyType == 'skeleton) EnemyPool.getEnemy(this, 'skeleton) else EnemyPool.getEnemy(this, 'ghost)
-    println("SPAWNING AT :" + point.getX + " " + point.getY)
-    e.setPosition(point.getX-48, point.getY)
-    //if(e collides) e.setPosition(point.getX, point.getY-48)
-    //if(e collides) e.setPosition(point.getX+48, point.getY)
-    //if(e collides) e.setPosition(point.getX, point.getY+48)
-    if(e collides) EnemyPool.returnEnemy(enemySet, e)
+    println("SPAWNING: " + point.getX + ", " + point.getY)
+    e.setPosition(point.getX - 48, point.getY)
+    println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
+    if (e collides) {
+      e.setPosition(point.getX, point.getY-48)
+      println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
+      if (e collides){
+        println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
+        e.setPosition(point.getX+48, point.getY)
+        if (e collides){
+          println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
+          e.setPosition(point.getX, point.getY+48)
+        }
+        else {
+          println("SPAWN " + point.id + " FAILED")
+          EnemyPool.returnEnemy(enemySet, e)}
+        }
+      }
   }
 
   def createSoulShard(x: Float, y: Float) = {

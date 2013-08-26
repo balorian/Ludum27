@@ -40,7 +40,7 @@ class Shot(screen: LevelTestScreen, image: TextureRegion) extends Actor{
   override def act(delta: Float){
     setPosition(getX + deltaV.x, getY + deltaV.y)
     
-    screen.enemySet.foreach(enemy => if (enemy.contains(getX, getY)) {enemy.health -= damage; assets.playSound("hurt"); ShotPool.returnShot(this)})
+    screen.enemySet.foreach(enemy => if (enemy.contains(getX, getY)) {enemy.health -= damage; assets.playSound("hit"); ShotPool.returnShot(this)})
     screen.spawnSet.foreach(spoint => if (spoint.contains(getX, getY)) {spoint.health -= damage; assets.hit.play(); ShotPool.returnShot(this)})
     screen.blockSet.foreach(block => if (block.contains(getX, getY)) {block.health -= damage; assets.hit.play(); ShotPool.returnShot(this)})
     screen.doorSet.foreach(door => if (door.contains(getX, getY)) {ShotPool.returnShot(this)})
