@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.audio.Sound
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable
 
 object Assets {
   val assets = new Assets
@@ -25,7 +26,7 @@ class Assets {
 
   val font: BitmapFont = new BitmapFont(Gdx.files.classpath("images/ronda32_bold.fnt"), false)
 
-  val skin: Skin = {
+  lazy val skin: Skin = {
     val skin = new Skin()
     
     val ls = new Label.LabelStyle()
@@ -34,6 +35,8 @@ class Assets {
     
     val tbs = new TextButtonStyle()
     tbs.font = font
+    tbs.down = new NinePatchDrawable(uiAtlas.createPatch("button_pressed"))
+    tbs.up = new NinePatchDrawable(uiAtlas.createPatch("button_normal"))
     skin.add("default", tbs)
     
     skin

@@ -10,12 +10,14 @@ import com.car.l.screens.SplashScreen
 import com.car.l.screens.TransitionScreen
 import com.car.l.screens.LevelEndScreen
 import com.car.l.screens.GameOverScreen
+import com.car.l.screens.MenuScreen
 
 class LudumGame extends Game {
   lazy val testScreen = new LevelTestScreen(this)
   lazy val transitionScreen = new TransitionScreen(this)
   lazy val levelEndScreen = new LevelEndScreen(this, testScreen)
   lazy val gameOverScreen = new GameOverScreen(this)
+  lazy val mainMenuScreen = new MenuScreen(this)
 
   var currentScreen: Option[AbstractScreen] = None
 
