@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.Pixmap.Format
 import com.car.l.screens.LevelTestScreen
 import com.badlogic.gdx.utils.Pool
+import com.badlogic.gdx.math.MathUtils
 
 class PlayerProcessor(player: Player) extends InputProcessor {
   val moveKeys = Map(Keys.W -> 0, Keys.D -> 1, Keys.S -> 2, Keys.A -> 3)
@@ -62,6 +63,14 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
   setPosition(4 * 48, 4 * 48)
 
+  def newLevel(level: Level) {
+    setPosition(level.startCoord._1, level.startCoord._2)
+    currentSpirit = MathUtils.clamp(currentSpirit + 2, 0, maxSpirit)
+    shootDir = 0
+    shootCooldown = 0f
+    movement = Array(false, false, false, false)
+  }
+
   override def act(delta: Float) {
     if (movement(0) || movement(1) || movement(2) || movement(3)) swapAnimation("walk")
     else swapAnimation("idle")
@@ -88,7 +97,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
         setPosition(scl.x + getX, scl.y + getY)
         val spawnCol = !(screen.blockSet.forall(block => !(block.collidesWith(this)))) || !(screen.spawnSet.forall(spawn => !(spawn.collidesWith(this))))
         println(screen.spawnSet.forall(spawn => !(spawn.collidesWith(this))))
-        
+
         if ((screen.level.get.collidesWith(boundingBox, Tile.WALL) || screen.level.get.collidesWith(boundingBox, Tile.WATER) || screen.collidesWithBlock(this)) || spawnCol)
           setPosition(oldPos._1, oldPos._2)
         else if (newLength < step)
@@ -118,8 +127,8 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     }
 
     if (shootDir > 0 && shootCooldown > WEAPON_COOLDOWN && !(shootDir == 5 || shootDir == 10)) {
-      	spawnShot(shootDir)
-      	shootCooldown = 0
+      spawnShot(shootDir)
+      shootCooldown = 0
     }
   }
 

@@ -58,7 +58,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     clearLists
 
     level = Some(LevelLoader.load(key, this))
-    player.setPosition(level.get.startCoord._1, level.get.startCoord._2)
+    player.newLevel(level.get)
     cameraControl
 
     stage.clear()
@@ -84,7 +84,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.getCamera().asInstanceOf[OrthographicCamera].zoom = 0.75f
     stage.getCamera().update()
   }
-  
+
   override def render(delta: Float) {
     gl.glClearColor(0, 0, 0, 1)
     gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
@@ -122,7 +122,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
   def collidesWithBlock(player: Player): Boolean = {
     var r = false
-    doorSet foreach (block => if (block.collidesWith(player)) {r = true; block.collidedWith(player)} )
+    doorSet foreach (block => if (block.collidesWith(player)) { r = true; block.collidedWith(player) })
     r
   }
 }
