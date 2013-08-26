@@ -53,6 +53,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     }
 
     level = Some(LevelLoader.load(key, this))
+    player.setPosition(level.get.startCoord._1, level.get.startCoord._2)
 
     stage.clear()
     stage.addActor(bgImage)
@@ -119,7 +120,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
   def collidesWithBlock(player: Player): Boolean = {
     var r = false
-    blocksSet foreach (block => if (block.collidesWith(player)) {r = true; block.collidedWith(player)} )
+    blocksSet foreach (block => if (block.collidesWith(player)) { r = true; block.collidedWith(player) })
     r
   }
 }

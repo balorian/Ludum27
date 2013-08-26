@@ -19,28 +19,25 @@ object Tile {
   val types = Map(GROUND -> "ground", WALL -> "wall", WATER -> "water", STAIRS_DOWN -> "stairs_down", STAIRS_UP -> "stairs_up")
 }
 
-class Level(val mapWidth: Int, val mapHeight: Int, tileMap: Array[Int]) extends Actor {
+class Level(val mapWidth: Int, val mapHeight: Int, tileMap: Array[Int], val startCoord: (Float, Float)) extends Actor {
   val tileSheet = assets.tileAtlas
 
-
-  
-  
   def getTile(x: Int, y: Int): Int = if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) tileMap(x + mapWidth * y) else Tile.EMPTY
-  def unitToMap(pair: (Float, Float)) = (floor(pair._1/Tile.TILE_SIZE), floor(pair._2/Tile.TILE_SIZE))
+  def unitToMap(pair: (Float, Float)) = (floor(pair._1 / Tile.TILE_SIZE), floor(pair._2 / Tile.TILE_SIZE))
 
   def collidesWith(x: Float, y: Float, tileType: Int): Boolean = {
     val mapCoord = unitToMap((x, y))
     getTile(mapCoord._1, mapCoord._2) == tileType
   }
 
-  def collidesWith(rect: Rectangle, tileType: Int): Boolean =  {
-    val tlc = unitToMap(rect.getX, rect.getY+rect.getHeight)
-    val trc = unitToMap(rect.getX+rect.getWidth, (rect.getY+rect.getHeight))
+  def collidesWith(rect: Rectangle, tileType: Int): Boolean = {
+    val tlc = unitToMap(rect.getX, rect.getY + rect.getHeight)
+    val trc = unitToMap(rect.getX + rect.getWidth, (rect.getY + rect.getHeight))
     val blc = unitToMap(rect.getX, rect.getY)
-    val brc = unitToMap(rect.getX+rect.getWidth, rect.getY)
+    val brc = unitToMap(rect.getX + rect.getWidth, rect.getY)
 
     getTile(blc._1, blc._2) == tileType || getTile(brc._1, brc._2) == tileType ||
-    getTile(tlc._1, tlc._2) == tileType || getTile(trc._1, trc._2) == tileType 
+      getTile(tlc._1, tlc._2) == tileType || getTile(trc._1, trc._2) == tileType
   }
 
   override def draw(batch: SpriteBatch, parentAlpha: Float) {
