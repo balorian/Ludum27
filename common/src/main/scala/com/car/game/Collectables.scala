@@ -35,11 +35,11 @@ class Key(animations: Map[String, Animation], screen: LevelTestScreen) extends C
 }
 
 class SoulShard(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "soul") {
-  override def pickup(player: Player) = player.currentSpirit = MathUtils.clamp(player.currentSpirit + 1, 0, player.maxSpirit)
+  override def pickup(player: Player) = player.modSpirit(1f)
 }
 
 class Meat(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "meat") {
-  override def pickup(player: Player) = player.currentHealth = MathUtils.clamp(player.currentHealth + 10, 0, player.maxHealth)
+  override def pickup(player: Player) = player.modHealth(10)
 }
 
 class Door(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 0, screen, screen.doorSet, "door") {

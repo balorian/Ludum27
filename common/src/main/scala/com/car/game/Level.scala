@@ -19,7 +19,7 @@ object Tile {
   val types = Map(GROUND -> "ground", WALL -> "wall", WATER -> "water", STAIRS_DOWN -> "stairs_down", STAIRS_UP -> "stairs_up")
 }
 
-class Level(val mapWidth: Int, val mapHeight: Int, tileMap: Array[Int], val startCoord: (Float, Float)) extends Actor {
+class Level(val mapWidth: Int, val mapHeight: Int, tileMap: Array[Int], val startCoord: (Float, Float), val name:String) extends Actor {
   val tileSheet = assets.tileAtlas
 
   def getTile(x: Int, y: Int): Int = if (x >= 0 && x < mapWidth && y >= 0 && y < mapHeight) tileMap(x + mapWidth * y) else Tile.EMPTY
