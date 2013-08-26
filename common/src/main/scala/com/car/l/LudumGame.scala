@@ -8,10 +8,13 @@ import com.car.l.screens.LevelTestScreen
 import com.car.l.screens.AbstractScreen
 import com.car.l.screens.SplashScreen
 import com.car.l.screens.TransitionScreen
+import com.car.l.screens.LevelEndScreen
 
 class LudumGame extends Game {
   lazy val testScreen = new LevelTestScreen(this)
   lazy val transitionScreen = new TransitionScreen(this)
+  lazy val levelEndScreen = new LevelEndScreen(this, testScreen)
+
   var currentScreen: Option[AbstractScreen] = None
 
   override def create() {
@@ -25,18 +28,17 @@ class LudumGame extends Game {
   }
 
   def transitionToScreen(screen: AbstractScreen) {
-    Gdx.input.setInputProcessor(transitionScreen.inputProcessor)
-
+	Gdx.input.setInputProcessor(transitionScreen.inputProcessor)
     transitionScreen.current = currentScreen
     transitionScreen.next = Some(screen)
     transitionScreen.reset
-
     setScreen(transitionScreen)
   }
 
   def transitionComplete() {
-    Gdx.input.setInputProcessor(transitionScreen.next.get.inputProcessor)
     currentScreen = transitionScreen.next
-    setScreen(transitionScreen.next.get)
+    Gdx.input.setInputProcessor(currentScreen.get.inputProcessor)
+    currentScreen.get.justDraw = false
+    setScreen(currentScreen.get)
   }
 }

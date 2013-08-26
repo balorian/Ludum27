@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.audio.Sound
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle
 
 object Assets {
   val assets = new Assets
@@ -26,9 +27,15 @@ class Assets {
 
   val skin: Skin = {
     val skin = new Skin()
+    
     val ls = new Label.LabelStyle()
     ls.font = font
     skin.add("default", ls)
+    
+    val tbs = new TextButtonStyle()
+    tbs.font = font
+    skin.add("default", tbs)
+    
     skin
   }
 

@@ -55,8 +55,11 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
       blockSet.clear
     }
 
+    clearLists
+
     level = Some(LevelLoader.load(key, this))
     player.setPosition(level.get.startCoord._1, level.get.startCoord._2)
+    cameraControl
 
     stage.clear()
     stage.addActor(bgImage)
@@ -68,11 +71,6 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.addActor(player)
   }
 
-  override def into() {
-    Gdx.app.debug(LOG_TAG, "GOING TO LEVEL 1")
-    setLevel("test1")
-  }
-
   override def inputProcessor = {
     val plex = new InputMultiplexer()
     plex.addProcessor(stage)
@@ -80,31 +78,31 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     plex
   }
 
+  def cameraControl() {
+    stage.getCamera().position.set(player.getX(), player.getY, 0)
+    bgImage.setPosition(player.getX() - sprite.getWidth() / 2, player.getY - sprite.getHeight() / 2)
+    stage.getCamera().asInstanceOf[OrthographicCamera].zoom = 0.75f
+    stage.getCamera().update()
+  }
+  
   override def render(delta: Float) {
     gl.glClearColor(0, 0, 0, 1)
     gl.glClear(GL10.GL_COLOR_BUFFER_BIT)
 
-    //    spawnList foreach (sp => sp.act(delta))
+    if (justDraw) { stage.draw(); ui.render(delta); return }
+
     stage.act()
     cameraControl()
     stage.draw()
 
     ui.update
     ui.render(delta)
-
-    def cameraControl() {
-      stage.getCamera().position.set(player.getX(), player.getY, 0)
-      bgImage.setPosition(player.getX() - sprite.getWidth() / 2, player.getY - sprite.getHeight() / 2)
-      stage.getCamera().asInstanceOf[OrthographicCamera].zoom = 0.75f
-      stage.getCamera().update()
-    }
   }
 
   def spawnOnPoint(point: SpawnPoint) {
     val e = new Enemy(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("skeleton"), Animation.LOOP)), this)
     e.setPosition(point.getX(), point.getY())
     stage.addActor(e)
-
     Gdx.app.debug(LOG_TAG, "Spawn on " + point.getX() + ", " + point.getY())
   }
 

@@ -94,7 +94,7 @@ object LevelLoader {
           tilemap(index) = Tile.GROUND; spawnPoint2(x, y)
         case BREAKABLE_WALL =>
           tilemap(index) = Tile.GROUND; spawnBreakable(x, y)
-        case Tile.STAIRS_DOWN =>
+        case Tile.STAIRS_UP =>
           tilemap(index) = pixel; sc = (x, y)
         case _ => tilemap(index) = pixel
       }

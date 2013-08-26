@@ -27,6 +27,9 @@ class TransitionScreen(game: LudumGame) extends AbstractScreen(game) {
   }
 
   def reset() {
+    current.get.justDraw = true
+    next.get.justDraw = true
+    
     toDraw = current
     stage.clear()
 

@@ -55,11 +55,11 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   var currentHealth = maxHealth
 
   val maxSpirit = 10f
-  var currentSpirit : Float = maxSpirit
+  var currentSpirit: Float = maxSpirit
 
   var score = 0
   var keys = 0
-  
+
   setPosition(4 * 48, 4 * 48)
 
   override def act(delta: Float) {
@@ -69,7 +69,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     shootCooldown += delta
 
     super.act(delta)
-    
+
     currentSpirit -= delta
 
     var deltaV = new Vector2(0, 0)
@@ -100,6 +100,10 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
     scan(0.05f, new Vector2(deltaV.x, 0).nor, deltaV.len)
     scan(0.05f, new Vector2(0, deltaV.y).nor, deltaV.len)
+
+    if (screen.level.get.collidesWith(boundingBox, Tile.STAIRS_DOWN)) {
+      screen.game.transitionToScreen(screen.game.levelEndScreen)
+    }
 
     def spawnShot(dir: Int) {
       val shot = ShotPool.getShot(screen)

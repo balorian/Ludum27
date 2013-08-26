@@ -12,6 +12,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 abstract class AbstractScreen(val game: LudumGame) extends Screen {
   var paused = false
   var visible = false
+  var justDraw = false
+  
   lazy val stage: Stage = new Stage(graphics.getWidth, graphics.getHeight,
     false)
   
@@ -46,7 +48,6 @@ abstract class AbstractScreen(val game: LudumGame) extends Screen {
   def render(delta: Float): Unit = {
     gl.glClearColor(0, 0, 0, 1);
     gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-    println("CALL")
     stage.act(delta)
     stage.getCamera.asInstanceOf[OrthographicCamera].zoom = 0.75f
     stage.getCamera.update
