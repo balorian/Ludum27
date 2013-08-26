@@ -59,8 +59,8 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
   override def act(delta: Float) {
     super.act(delta)
     if (health <= 0) {
-      EnemyPool.returnEnemy(screen.enemySet, this)
       screen.createSoulShard(getX, getY)
+      EnemyPool.returnEnemy(screen.enemySet, this)
       if(enemyType == 'skeleton)
         screen.player.score += 10
       else
