@@ -18,13 +18,14 @@ class GameOverScreen(game: LudumGame) extends AbstractScreen(game) {
     override def changed(event: ChangeEvent, actor: Actor) {
       game.testScreen.setLevel(LevelLoader.levels.head)
       game.transitionToScreen(game.testScreen)
+      assets.playSound("button")
     }
   })
-  
-  override def into(){
+
+  override def into() {
     game.testScreen.player.reset()
   }
-  
+
   val label = new Label("You have perished", assets.skin)
   label.setPosition(graphics.getWidth() / 2 - label.getWidth() / 2, 300)
 

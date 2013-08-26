@@ -13,7 +13,7 @@ import com.car.l.LevelLoader
 object GameUI {
   val LEVEL = "Level - "
   val SCORE = "Score - "
-  val KEYS = "x"
+  val NUMBER_SEPARATOR = "x"
 }
 
 class GameUI(val player: Player) {
@@ -32,9 +32,14 @@ class GameUI(val player: Player) {
   levelLabel.setPosition(graphics.getWidth() - 100f - font.getBounds(levelLabel.getText()).width, graphics.getHeight() - 50)
 
   val keyImage = new Image(assets.uiAtlas.createSprite("key"))
-  keyImage.setPosition(graphics.getWidth() / 2 - 16, 10)
-  val keyLabel = new Label(GameUI.KEYS + "0", assets.skin)
-  keyLabel.setPosition(graphics.getWidth() / 2, 10)
+  keyImage.setPosition(graphics.getWidth() / 2 - 33, 10)
+  val keyLabel = new Label(GameUI.NUMBER_SEPARATOR + "0", assets.skin)
+  keyLabel.setPosition(graphics.getWidth() / 2 - 16, 10)
+
+  val potionImage = new Image(assets.uiAtlas.createSprite("potion"))
+  potionImage.setPosition(graphics.getWidth() / 2 + 32, 10)
+  val potionLabel = new Label(GameUI.NUMBER_SEPARATOR + "0", assets.skin)
+  potionLabel.setPosition(graphics.getWidth() / 2 + 51, 10)
 
   stage.addActor(spiritBar)
   stage.addActor(healthBar)
@@ -42,11 +47,14 @@ class GameUI(val player: Player) {
   stage.addActor(levelLabel)
   stage.addActor(keyImage)
   stage.addActor(keyLabel)
+  stage.addActor(potionImage)
+  stage.addActor(potionLabel)
 
   def update() {
     levelLabel.setText(GameUI.LEVEL + LevelLoader.depth)
     scoreLabel.setText(GameUI.SCORE + player.score)
-    keyLabel.setText(GameUI.KEYS + player.keys)
+    keyLabel.setText(GameUI.NUMBER_SEPARATOR + player.keys)
+    potionLabel.setText(GameUI.NUMBER_SEPARATOR + player.potions)
 
     spiritBar.ratio = player.currentSpirit / player.maxSpirit
     healthBar.ratio = player.currentHealth.toFloat / player.maxHealth.toFloat
