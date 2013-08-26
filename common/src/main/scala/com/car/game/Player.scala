@@ -61,7 +61,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   var shootCooldown = 0f
   
   var superSayan = false
-  var powerTimer = 0f
+  var powerTimer = 45f
   
   val maxHealth = 100
   var currentHealth = maxHealth
