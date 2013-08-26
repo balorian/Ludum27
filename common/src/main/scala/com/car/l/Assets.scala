@@ -52,6 +52,7 @@ class Assets {
     manager.load("sounds/door.wav", classOf[Sound])
     manager.load("sounds/steps.wav", classOf[Sound])
     manager.load("sounds/enemy_hit.wav", classOf[Sound])
+    manager.load("sounds/death.wav", classOf[Sound])
     manager.load("sounds/throw.wav", classOf[Sound])
   }
 
