@@ -78,5 +78,5 @@ class Door(animations: Map[String, Animation], screen: LevelTestScreen) extends 
 }
 
 class SayanOrb(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 64, 20, screen, screen.collectablesSet, "soul_orb") {
-  override def pickup(player: Player) = player.superSayan = true
+  override def pickup(player: Player) = player.turnSayan(true)
 }

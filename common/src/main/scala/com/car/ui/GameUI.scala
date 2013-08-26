@@ -52,11 +52,6 @@ class GameUI(val player: Player) {
   stage.addActor(potionLabel)
 
   def update() {
-    if (player.superSayan) {
-      spiritBar.remove()
-      stage.addActor(finalBar)
-    }
-
     levelLabel.setText(GameUI.LEVEL + LevelLoader.depth)
     scoreLabel.setText(GameUI.SCORE + player.score)
     keyLabel.setText(GameUI.NUMBER_SEPARATOR + player.keys)
@@ -69,6 +64,18 @@ class GameUI(val player: Player) {
   def render(delta: Float) {
     stage.act(delta)
     stage.draw()
-
+  }
+  
+  def superSayan(b : Boolean){
+    if (b) {
+      spiritBar.remove()
+      stage.addActor(finalBar)
+    } else {
+      finalBar.remove()
+      finalBar.ratio = 0
+      stage.addActor(spiritBar)
+    }
+    
+    update
   }
 }
