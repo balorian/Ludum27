@@ -7,6 +7,8 @@ import com.car.l.Assets.assets
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.car.game.Player
 import com.badlogic.gdx.scenes.scene2d.ui.Image
+import com.car.l.screens.LevelTestScreen
+import com.car.l.LevelLoader
 
 object GameUI {
   val LEVEL = "Level - "
@@ -31,7 +33,7 @@ class GameUI(val player: Player) {
 
   val keyImage = new Image(assets.uiAtlas.createSprite("key"))
   keyImage.setPosition(graphics.getWidth() / 2 - 16, 10)
-  val keyLabel= new Label(GameUI.KEYS + "0", assets.skin)
+  val keyLabel = new Label(GameUI.KEYS + "0", assets.skin)
   keyLabel.setPosition(graphics.getWidth() / 2, 10)
 
   stage.addActor(spiritBar)
@@ -42,7 +44,7 @@ class GameUI(val player: Player) {
   stage.addActor(keyLabel)
 
   def update() {
-    levelLabel.setText(GameUI.LEVEL + "1")
+    levelLabel.setText(GameUI.LEVEL + LevelLoader.depth)
     scoreLabel.setText(GameUI.SCORE + player.score)
     keyLabel.setText(GameUI.KEYS + player.keys)
 

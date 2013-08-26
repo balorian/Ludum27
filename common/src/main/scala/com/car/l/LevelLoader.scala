@@ -29,7 +29,11 @@ object LevelLoader {
   val TREASURE = 0x0026FFFF
 
   val levels = List("level0", "level1", "level2", "level3")
+  
+  var depth = 1
+  
   def nextLevelFrom(current: String): String = {
+    depth += 1
     levels.takeRight(levels.length - 1 - levels.indexOf(current)).head
   }
 
