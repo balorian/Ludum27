@@ -2,9 +2,11 @@ package com.car.game
 
 import com.car.l.screens.LevelTestScreen
 import com.badlogic.gdx.graphics.g2d.Animation
+import scala.util.Random
 
 object SpawnPoint {
   val SPAWN_TIME = 3f
+  val random = new Random
 }
 
 class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen, val maxHealth: Int, val enemyType: Symbol, val id: Int) extends Entity(animations, 48, 0) {
@@ -25,8 +27,10 @@ class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen
     if (health <= 0) {
       remove
       screen.spawnSet.remove(this)
-      screen.createSoulShard(getX, getY)
-      if(enemyType == 'skeleton) screen.player.score += 50
+      if (SpawnPoint.random.nextFloat < 0.2) screen.createMeat(getX, getY)
+      else screen.createSoulShard(getX, getY)
+
+      if (enemyType == 'skeleton) screen.player.score += 50
       else screen.player.score += 100
     }
   }

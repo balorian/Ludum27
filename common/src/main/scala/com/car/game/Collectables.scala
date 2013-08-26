@@ -53,6 +53,10 @@ class SoulShard(animations: Map[String, Animation], screen: LevelTestScreen) ext
   }
 }
 
+class Treasure(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "big_pickup") {
+  override def pickup(player: Player) = player.score += 1000
+}
+
 class Meat(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "meat") {
   override def pickup(player: Player) = player.modHealth(10)
 }
@@ -63,3 +67,4 @@ class Door(animations: Map[String, Animation], screen: LevelTestScreen) extends 
     collisionPartner = None
   }
 }
+

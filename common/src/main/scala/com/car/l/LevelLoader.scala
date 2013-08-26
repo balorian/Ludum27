@@ -13,6 +13,7 @@ import com.car.game.Key
 import com.car.game.Door
 import com.car.game.BreakBlock
 import com.car.game.BreakBlock
+import com.car.game.Treasure
 
 object LevelLoader {
   val LOG_TAG = "LevelLoader"
@@ -25,7 +26,8 @@ object LevelLoader {
   val SPAWN_1 = 0x4CFF00FF
   val SPAWN_2 = 0x287D00FF
   val BREAKABLE_WALL = 0xD67FFFFF
-  
+  val TREASURE = 0x0026FFFF
+
   var cid = 0
 
   val levels = List("level0", "level1", "level2")
@@ -58,6 +60,12 @@ object LevelLoader {
       key
     }
 
+    def createTreasure(x: Int, y: Int): Treasure = {
+      val t = new Treasure(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("treasure"), Animation.LOOP)), screen)
+      t.setPosition(x, y)
+      t
+    }
+
     def createDoor(x: Int, y: Int): Door = {
       val key = new Door(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("door"), Animation.LOOP)), screen)
       key.setPosition(x, y)
@@ -71,6 +79,7 @@ object LevelLoader {
     }
 
     def spawnKey(i: Int, j: Int) = screen.collectablesSet.add(createKey(i, j))
+    def spawnTreasure(i: Int, j: Int) = screen.collectablesSet.add(createTreasure(i, j))
     def spawnDoor(i: Int, j: Int) = screen.doorSet.add(createDoor(i, j))
     def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn1(i, j))
     def spawnPoint2(i: Int, j: Int) = screen.spawnSet.add(createSpawn2(i, j))
@@ -103,6 +112,8 @@ object LevelLoader {
           tilemap(index) = Tile.GROUND; spawnPoint2(x, y)
         case BREAKABLE_WALL =>
           tilemap(index) = Tile.GROUND; spawnBreakable(x, y)
+        case TREASURE =>
+          tilemap(index) = Tile.GROUND; spawnTreasure(x, y)
         case Tile.STAIRS_UP =>
           tilemap(index) = pixel; sc = (x, y)
         case _ => tilemap(index) = pixel
