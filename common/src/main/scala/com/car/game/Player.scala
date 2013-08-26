@@ -59,7 +59,9 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   var movement = Array(false, false, false, false)
   var shootDir = 0
   var shootCooldown = 0f
-
+  
+  var superSayan = false
+  
   val maxHealth = 100
   var currentHealth = maxHealth
 

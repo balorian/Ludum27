@@ -24,6 +24,7 @@ class GameUI(val player: Player) {
 
   val spiritBar = new StateBar(10, 10, 64, graphics.getHeight() - 20, new Color(1f, 0xFF / 0x13, 0xFF / 0x7F, 1))
   val healthBar = new StateBar(graphics.getWidth() - 74, 10, 64, graphics.getHeight() - 20, new Color(0.75f, 0, 0, 1))
+  val finalBar = new SpiritBar(10, 10, 64, graphics.getHeight() - 20)
 
   val scoreLabel = new Label(GameUI.SCORE + "0", assets.skin)
   scoreLabel.setPosition(100, graphics.getHeight() - 50)
@@ -51,6 +52,11 @@ class GameUI(val player: Player) {
   stage.addActor(potionLabel)
 
   def update() {
+    if (player.superSayan) {
+      spiritBar.remove()
+      stage.addActor(finalBar)
+    }
+
     levelLabel.setText(GameUI.LEVEL + LevelLoader.depth)
     scoreLabel.setText(GameUI.SCORE + player.score)
     keyLabel.setText(GameUI.NUMBER_SEPARATOR + player.keys)
