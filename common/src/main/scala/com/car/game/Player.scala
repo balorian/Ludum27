@@ -57,7 +57,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   val maxHealth = 100
   var currentHealth = maxHealth
 
-  val maxSpirit = 10f
+  val maxSpirit = 120f
   var currentSpirit: Float = maxSpirit
 
   var score = 0
@@ -119,6 +119,12 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     if (currentSpirit == 0 || currentHealth == 0) {
       screen.game.transitionToScreen(screen.game.gameOverScreen)
     }
+    
+    screen.enemySet.foreach(enemy => 
+      if (enemy.collidesWith(this)) {
+    	EnemyPool.returnEnemy(screen.enemySet, enemy)
+    	modHealth(-enemy.damage)
+      })
     
     def spawnShot(dir: Int) {
       val shot = ShotPool.getShot(screen)

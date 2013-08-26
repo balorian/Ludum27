@@ -58,6 +58,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     }
 
     clearLists
+    enemySet.foreach(enemy => EnemyPool.returnEnemy(enemySet, enemy))
 
     level = Some(LevelLoader.load(key, this))
     player.newLevel(level.get)
