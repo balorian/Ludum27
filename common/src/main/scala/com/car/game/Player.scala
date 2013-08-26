@@ -106,10 +106,11 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
   def usePotion() {
     if (potions > 0) {
-      screen.enemySet.foreach(enemy => if (scala.math.max(getX - enemy.getX, getY - enemy.getY) < 300) enemy.health -= 20)
+      screen.enemySet.foreach(enemy => if (scala.math.max(getX - enemy.getX, getY - enemy.getY) < 300) enemy.health -= 10)
       screen.stage.addActor(new Fader(screen))
       assets.playSound("explosion")
       potions -= 1
+      modSpirit(3)
     }
   }
 

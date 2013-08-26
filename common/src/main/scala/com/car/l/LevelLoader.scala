@@ -18,6 +18,7 @@ import com.car.game.Meat
 import com.car.game.Potion
 import com.car.game.PowerPotion
 import com.car.game.PowerPotion
+import com.car.game.SayanOrb
 
 
 object LevelLoader {
