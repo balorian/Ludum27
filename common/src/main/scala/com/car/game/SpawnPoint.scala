@@ -32,6 +32,7 @@ class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen
       else screen.createSoulShard(getX, getY)
 
       if (enemyType == 'skeleton) screen.player.score += 50
+      else if (enemyType == 'zombie) screen.player.score += 75
       else screen.player.score += 100
     }
   }

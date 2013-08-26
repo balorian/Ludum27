@@ -8,6 +8,9 @@ import scala.collection.mutable.HashSet
 import com.car.l.Assets.assets
 import scala.math.random
 import scala.util.Random
+import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
 object EnemyPool {
   var freeEnemies: Stack[Enemy] = new Stack[Enemy]()
@@ -16,7 +19,8 @@ object EnemyPool {
   def getEnemy(screen: LevelTestScreen, enemyType: Symbol): Enemy = {
     if (freeEnemies.isEmpty) {
       new Enemy(Map("skeleton" -> new Animation(0.20f, assets.creatureAtlas.createSprites("skeleton"), Animation.LOOP),
-        "ghost" -> new Animation(0.20f, assets.creatureAtlas.createSprites("ghost"), Animation.LOOP)), screen, enemyType)
+        "ghost" -> new Animation(0.20f, assets.creatureAtlas.createSprites("ghost"), Animation.LOOP),
+        "zombie" -> new Animation(0.20f, assets.creatureAtlas.createSprites("zombie"))), screen, enemyType)
     } else {
       val ret = freeEnemies.pop()
       ret.setVisible(true)
@@ -48,6 +52,7 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
   var speed: Float = 0
   var damage: Int = 0
   var health: Int = 0
+  var shotTimer: Float = 5f
   setType(enemyType)
   screen.enemySet.add(this)
   screen.stage.addActor(this)
@@ -55,11 +60,13 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
   def setType(enemyType: Symbol) {
     enemyType match {
       case 'skeleton => swapAnimation("skeleton")
+      case 'zombie => swapAnimation("zombie")
       case 'ghost => swapAnimation("ghost")
     }
-    speed = if (enemyType == 'skeleton) 2.5f else 1.5f
-    damage = if (enemyType == 'skeleton) 4 else 9
-    health = if (enemyType == 'skeleton) 7 else 14
+    speed = if (enemyType == 'skeleton) 2.5f else if (enemyType == 'zombie) 1.5f else 2f
+    damage = if (enemyType == 'skeleton) 4 else if (enemyType == 'zombie) 9 else 15
+    health = if (enemyType == 'skeleton) 7 else if (enemyType == 'zombie) 14 else 20 
+    shotTimer = 5f - random.toFloat * 3
   }
 
   override def act(delta: Float) {
@@ -69,8 +76,10 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
       EnemyPool.returnEnemy(screen.enemySet, this)
       if (enemyType == 'skeleton)
         screen.player.score += 10
-      else
+      else if(enemyType == 'zombie)
         screen.player.score += 20
+        else
+          screen.player.score += 40
     }
 
     val pc = screen.player.getCenter
@@ -81,6 +90,21 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
     scan(0.5f, new Vector2(0, deltaV.y).nor, deltaV.len)
 
     setRotation(deltaV.angle() + 270)
+    
+    if(enemyType == 'ghost){
+      shotTimer -= delta
+      def spawnShot() {
+      val shot = GhostShotPool.getShot(screen)
+      val shotPos = new Vector2(getX + 48 / 2f, getY + 48 / 2f).add(deltaV.nor.scl(27f))
+      shot.setPosition(shotPos.x, shotPos.y)
+      shot.deltaV = deltaV.nor.scl(speed * 2)
+      }
+      
+      if(shotTimer < 0){
+        spawnShot()
+        shotTimer = 5f - random.toFloat * 3
+      }
+    }
   }
 
   override def collides(): Boolean = {
@@ -89,4 +113,55 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
 
     (screen.level.get.collidesWith(boundingBox, Tile.WALL) || screen.level.get.collidesWith(boundingBox, Tile.WATER)) || spawnCol
   }
+}
+
+object GhostShotPool{
+  var freeShots: Stack[GhostShot] = new Stack[GhostShot]()
+  
+  def getShot(screen: LevelTestScreen): GhostShot = {
+    if(freeShots.isEmpty) new GhostShot(screen, assets.creatureAtlas.findRegion("ghost_ball", 1))
+    else {
+      val ret = freeShots.pop()
+      ret.setVisible(true)
+      screen.stage.addActor(ret)
+      ret
+    }
+  }
+  
+  def returnShot(shot: GhostShot){
+    shot.deltaV = new Vector2(0, 0)
+    shot.spinCounter = 0
+    shot.setVisible(false)
+    shot.remove
+    freeShots.push(shot)
+  }
+}
+
+class GhostShot(screen: LevelTestScreen, image: TextureRegion) extends Actor{
+  val damage = 7
+  var deltaV = new Vector2(0, 0)
+  var spinCounter = 0
+  screen.stage.addActor(this)
+  
+  override def act(delta: Float){
+    setPosition(getX + deltaV.x, getY + deltaV.y)
+    
+    if(screen.player.contains(getX, getY)) {screen.player.modHealth(damage); GhostShotPool.returnShot(this)}
+    screen.spawnSet.foreach(spoint => if (spoint.contains(getX, getY)) {GhostShotPool.returnShot(this)})
+    screen.blockSet.foreach(block => if (block.contains(getX, getY)) {GhostShotPool.returnShot(this)})
+    screen.doorSet.foreach(door => if (door.contains(getX, getY)) {GhostShotPool.returnShot(this)})
+    
+    if(screen.level.get.collidesWith(getX+image.getRegionWidth/2, getY+image.getRegionHeight/2, Tile.WALL)){
+      GhostShotPool.returnShot(this)
+    }
+    spinCounter += 1
+    setRotation(spinCounter * 45)
+  }
+  
+  override def draw(batch: SpriteBatch, parentAlpha: Float){
+    val center = image.getRegionWidth/2
+    batch.draw(image.getTexture, getX-center, getY-center, image.getRegionWidth/2, image.getRegionHeight/2, image.getRegionWidth, image.getRegionHeight, 1, 1,
+    		 	getRotation, image.getRegionX, image.getRegionY, image.getRegionWidth, image.getRegionHeight, false, false)
+  }
+  
 }

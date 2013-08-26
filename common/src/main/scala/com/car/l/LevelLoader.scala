@@ -27,12 +27,13 @@ object LevelLoader {
   val DOOR = 0x7D7D00FF
   val SPAWN_1 = 0x4CFF00FF
   val SPAWN_2 = 0x287D00FF
+  val SPAWN_3 = 0x194C00FF
   val BREAKABLE_WALL = 0xD67FFFFF
   val TREASURE = 0x0026FFFF
   val MEAT = 0xFFBFECFF
   val POTION = 0xFF6A00FF
 
-  val levels = List("level0", "level1", "level2", "level3", "level5")
+  val levels = List("level0", "level1", "level2", "level3", "level4", "level5")
   
   var depth = 1
   
@@ -43,21 +44,29 @@ object LevelLoader {
 
   def load(key: String, screen: LevelTestScreen): Level = {
     def createSpawn1(x: Int, y: Int): SpawnPoint = {
-      val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn"), Animation.LOOP),
-        "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn_damaged"), Animation.LOOP)),
+      val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn3"), Animation.LOOP),
+        "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn3_damaged"), Animation.LOOP)),
         screen, 20, 'skeleton)
       sp.setPosition(x, y)
       sp
     }
 
     def createSpawn2(x: Int, y: Int): SpawnPoint = {
-      val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn2"), Animation.LOOP),
-        "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn2_damaged"), Animation.LOOP)),
-        screen, 40, 'ghost)
+      val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn"), Animation.LOOP),
+        "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn_damaged"), Animation.LOOP)),
+        screen, 35, 'zombie)
       sp.setPosition(x, y)
       sp
     }
 
+    def createSpawn3(x: Int, y: Int): SpawnPoint = {
+      val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn2"), Animation.LOOP),
+        "damaged" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn2_damaged"), Animation.LOOP)),
+        screen, 45, 'ghost)
+      sp.setPosition(x, y)
+      sp
+    }
+    
     def createKey(x: Int, y: Int): Key = {
       val key = new Key(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("key"), Animation.LOOP_PINGPONG)), screen)
       key.setPosition(x, y)
@@ -99,6 +108,7 @@ object LevelLoader {
     def spawnDoor(i: Int, j: Int) = screen.doorSet.add(createDoor(i, j))
     def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn1(i, j))
     def spawnPoint2(i: Int, j: Int) = screen.spawnSet.add(createSpawn2(i, j))
+    def spawnPoint3(i: Int, j: Int) = screen.spawnSet.add(createSpawn3(i, j))
     def spawnBreakable(i: Int, j: Int) = screen.blockSet.add(createBlock(i, j))
     def spawnMeat(i: Int, j: Int) = screen.collectablesSet.add(createMeat(i, j))
     def spawnPotion(i: Int, j: Int) = screen.collectablesSet.add(createPotion(i, j))
@@ -128,6 +138,8 @@ object LevelLoader {
           tilemap(index) = Tile.GROUND; spawnPoint1(x, y)
         case SPAWN_2 =>
           tilemap(index) = Tile.GROUND; spawnPoint2(x, y)
+        case SPAWN_3 =>
+          tilemap(index) = Tile.GROUND; spawnPoint3(x, y)
         case BREAKABLE_WALL =>
           tilemap(index) = Tile.GROUND; spawnBreakable(x, y)
         case TREASURE =>

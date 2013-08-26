@@ -76,7 +76,6 @@ abstract class Entity(animations: Map[String, Animation], entitySize: Int, boxOf
   def collides(): Boolean
   
   override def draw(batch: SpriteBatch, parentAlpha: Float) = {
-    //batch.draw(animations(currentAnimation).getKeyFrame(animationTimer), getX, getY)
     val region = animations(currentAnimation).getKeyFrame(animationTimer)
     
     batch.draw(region.getTexture, getX, getY, entitySize/2, entitySize/2, entitySize, entitySize, 1, 1,

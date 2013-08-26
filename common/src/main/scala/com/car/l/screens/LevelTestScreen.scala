@@ -109,7 +109,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   }
 
   def spawnOnPoint(point: SpawnPoint) {
-    val e = if (point.enemyType == 'skeleton) EnemyPool.getEnemy(this, 'skeleton) else EnemyPool.getEnemy(this, 'ghost)
+    val e = if (point.enemyType == 'skeleton) EnemyPool.getEnemy(this, 'skeleton) else if (point.enemyType == 'ghost) EnemyPool.getEnemy(this, 'ghost) else EnemyPool.getEnemy(this, 'zombie)
     e.setPosition(point.getX - 48, point.getY)
     if (e collides) {
       e.setPosition(point.getX(), point.getY() - 48)
