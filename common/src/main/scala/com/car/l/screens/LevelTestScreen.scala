@@ -107,20 +107,14 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
   def spawnOnPoint(point: SpawnPoint) {
     val e = if (point.enemyType == 'skeleton) EnemyPool.getEnemy(this, 'skeleton) else EnemyPool.getEnemy(this, 'ghost)
-    println("SPAWNING: " + point.getX + ", " + point.getY)
     e.setPosition(point.getX - 48, point.getY)
-    println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
     if (e collides) {
-      e.setPosition(point.getX, point.getY - 48)
-      println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
+      e.setPosition(point.getX(), point.getY() - 48)
       if (e collides) {
-        println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
-        e.setPosition(point.getX + 48, point.getY)
+        e.setPosition(point.getX() + 48, point.getY())
         if (e collides) {
-          println("SPAWNLOC: " + point.getX + ", " + point.getY + " TRYING: " + e.getX + ", " + e.getY)
-          e.setPosition(point.getX, point.getY + 48)
+          e.setPosition(point.getX(), point.getY() + 48)
           if (e collides) {
-            println("SPAWN " + point.id + " FAILED")
             EnemyPool.returnEnemy(enemySet, e)
           }
         }

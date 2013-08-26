@@ -32,6 +32,7 @@ object EnemyPool {
     enemy.speed = 2.5f
     enemy.setVisible(false)
     enemy.remove
+    enemy.setPosition(0, 0)
     set.remove(enemy)
     freeEnemies.push(enemy)
   }
@@ -59,6 +60,10 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
     super.act(delta)
     if (health <= 0) {
       EnemyPool.returnEnemy(screen.enemySet, this)
+      if(enemyType == 'skeleton)
+        screen.player.score += 10
+      else
+        screen.player.score += 20
     }
 
     val pc = screen.player.getCenter

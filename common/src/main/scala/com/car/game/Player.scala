@@ -89,6 +89,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     shootDir = 0
     shootCooldown = 0f
     movement = Array(false, false, false, false)
+    score = 0
   }
 
   override def act(delta: Float) {
@@ -121,6 +122,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
     if (currentSpirit == 0 || currentHealth == 0) {
       screen.game.transitionToScreen(screen.game.gameOverScreen)
+      assets.playSound("death")
     }
     
     screen.enemySet.foreach(enemy => 

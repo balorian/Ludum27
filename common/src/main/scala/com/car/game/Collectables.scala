@@ -31,7 +31,7 @@ abstract class Collectable(
 }
 
 class Key(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "key") {
-  override def pickup(player: Player) = player.keys += 1
+  override def pickup(player: Player) = {player.keys += 1; player.score += 100}
 }
 
 class SoulShard(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "soul") {

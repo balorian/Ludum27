@@ -25,6 +25,8 @@ class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen
     if(health <= 0){
       remove
       screen.spawnSet.remove(this)
+      if(enemyType == 'skeleton) screen.player.score += 50
+      else screen.player.score += 100
     }
   }
   
