@@ -5,6 +5,7 @@ import com.car.l.screens.LevelTestScreen
 import com.car.l.Assets
 import com.badlogic.gdx.math.MathUtils
 import scala.collection.mutable.HashSet
+import com.badlogic.gdx.math.Vector2
 
 abstract class Collectable(
   animations: Map[String, Animation],
@@ -26,7 +27,7 @@ abstract class Collectable(
 
   def pickup(player: Player) = {
   }
-  
+
   override def collides() = false
 }
 
@@ -34,8 +35,22 @@ class Key(animations: Map[String, Animation], screen: LevelTestScreen) extends C
   override def pickup(player: Player) = {player.keys += 1; player.score += 100}
 }
 
-class SoulShard(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "soul") {
+class SoulShard(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 24, 2, screen, screen.collectablesSet, "soul") {
   override def pickup(player: Player) = player.modSpirit(1f)
+
+  val speed = 5f
+
+  override def act(delta: Float) {
+    super.act(delta)
+
+    val pv = screen.player.center
+    val ov = center
+
+    if (math.sqrt(pv.dst2(ov)) <= 100) {
+      val nv = ov.add(pv.sub(ov).nor().mul(speed))
+      setPosition(nv.x, nv.y)
+    }
+  }
 }
 
 class Meat(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "meat") {

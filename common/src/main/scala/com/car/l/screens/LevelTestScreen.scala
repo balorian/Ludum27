@@ -123,7 +123,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   }
 
   def createSoulShard(x: Float, y: Float) = {
-    val ss = new SoulShard(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("soul_shard"), Animation.LOOP)), this)
+    val ss = new SoulShard(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("soul"), Animation.LOOP_PINGPONG)), this)
     ss.setPosition(x, y)
     collectablesSet.add(ss)
     stage.addActor(ss)
