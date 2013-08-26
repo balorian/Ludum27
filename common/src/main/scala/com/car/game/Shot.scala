@@ -42,9 +42,10 @@ class Shot(screen: LevelTestScreen, normal: TextureRegion, power: TextureRegion,
   override def act(delta: Float){
     setPosition(getX + deltaV.x, getY + deltaV.y)
     
-    screen.enemySet.foreach(enemy => if (enemy.contains(getX, getY)) {enemy.health -= damage + 3; assets.playSound("hit"); ShotPool.returnShot(this); screen.player.score += 5})
-    screen.spawnSet.foreach(spoint => if (spoint.contains(getX, getY)) {spoint.health -= damage + 3; assets.hit.play(); ShotPool.returnShot(this); screen.player.score += 5})
-    screen.blockSet.foreach(block => if (block.contains(getX, getY)) {block.health -= damage + 3; assets.hit.play(); ShotPool.returnShot(this)})
+    val bonus = if(powered) 3 else 0
+    screen.enemySet.foreach(enemy => if (enemy.contains(getX, getY)) {enemy.health -= damage + bonus; assets.playSound("hit"); ShotPool.returnShot(this); screen.player.score += 5})
+    screen.spawnSet.foreach(spoint => if (spoint.contains(getX, getY)) {spoint.health -= damage + bonus; assets.hit.play(); ShotPool.returnShot(this); screen.player.score += 5})
+    screen.blockSet.foreach(block => if (block.contains(getX, getY)) {block.health -= damage + bonus; assets.hit.play(); ShotPool.returnShot(this)})
     screen.doorSet.foreach(door => if (door.contains(getX, getY)) {ShotPool.returnShot(this)})
     
     if(screen.level.get.collidesWith(getX, getY, Tile.WALL)){
