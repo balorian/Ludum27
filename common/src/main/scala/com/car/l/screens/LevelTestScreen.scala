@@ -30,6 +30,8 @@ import com.car.game.Enemy
 import scala.collection.mutable.HashSet
 import com.car.game.BreakBlock
 import com.car.game.EnemyPool
+import com.badlogic.gdx.graphics.Pixmap
+import com.badlogic.gdx.graphics.Texture
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
@@ -100,7 +102,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.act()
     cameraControl()
     stage.draw()
-
+    
     ui.update
     ui.render(delta)
   }
