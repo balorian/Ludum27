@@ -15,6 +15,7 @@ import com.car.l.screens.LevelTestScreen
 import com.badlogic.gdx.utils.Pool
 import com.badlogic.gdx.math.MathUtils
 import com.car.l.Assets.assets
+import com.car.l.screens.GameOverScreen
 
 class PlayerProcessor(player: Player) extends InputProcessor {
   val moveKeys = Map(Keys.W -> 0, Keys.D -> 1, Keys.S -> 2, Keys.A -> 3)
@@ -63,19 +64,28 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   var keys = 0
 
   setPosition(4 * 48, 4 * 48)
-  
+
   def modSpirit(delta: Float) {
     currentSpirit = MathUtils.clamp(currentSpirit + delta, 0, maxSpirit)
   }
-  
+
   def modHealth(delta: Int) {
-    currentHealth = MathUtils.clamp(currentHealth+ delta, 0, maxHealth)
-    if(delta < 0 ) assets.playSound("hurt")
+    currentHealth = MathUtils.clamp(currentHealth + delta, 0, maxHealth)
+    if (delta < 0) assets.playSound("hurt")
   }
-  
+
   def newLevel(level: Level) {
     setPosition(level.startCoord._1, level.startCoord._2)
     modSpirit(4f)
+    shootDir = 0
+    shootCooldown = 0f
+    movement = Array(false, false, false, false)
+  }
+  
+  def reset(){
+    currentSpirit = maxSpirit
+    currentHealth = maxHealth
+    keys = 0
     shootDir = 0
     shootCooldown = 0f
     movement = Array(false, false, false, false)
@@ -120,7 +130,12 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     scan(0.05f, new Vector2(0, deltaV.y).nor, deltaV.len)
 
     if (screen.level.get.collidesWith(boundingBox, Tile.STAIRS_DOWN)) {
+      assets.playSound("steps")
       screen.game.transitionToScreen(screen.game.levelEndScreen)
+    }
+
+    if (currentSpirit == 0 || currentHealth == 0) {
+      screen.game.transitionToScreen(screen.game.gameOverScreen)
     }
 
     def spawnShot(dir: Int) {

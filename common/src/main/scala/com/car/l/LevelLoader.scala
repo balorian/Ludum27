@@ -26,6 +26,11 @@ object LevelLoader {
   val SPAWN_2 = 0x287D00FF
   val BREAKABLE_WALL = 0xD67FFFFF
 
+  val levels = List("test1", "level1")
+  def nextLevelFrom(current: String): String = {
+    levels.takeRight(levels.length - 1 - levels.indexOf(current)).head
+  }
+
   def load(key: String, screen: LevelTestScreen): Level = {
     def createSpawn1(x: Int, y: Int): SpawnPoint = {
       val sp = new SpawnPoint(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("spawn"), Animation.LOOP),
@@ -60,7 +65,7 @@ object LevelLoader {
       block.setPosition(x, y)
       block
     }
-    
+
     def spawnKey(i: Int, j: Int) = screen.collectablesSet.add(createKey(i, j))
     def spawnDoor(i: Int, j: Int) = screen.doorSet.add(createDoor(i, j))
     def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn1(i, j))
@@ -100,7 +105,7 @@ object LevelLoader {
       }
     }
 
-    new Level(width, height, tilemap, sc)
+    new Level(width, height, tilemap, sc, key)
   }
 }
 
