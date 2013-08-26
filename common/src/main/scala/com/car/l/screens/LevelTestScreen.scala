@@ -138,6 +138,13 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.addActor(pot)
   }
 
+  def createPowerPotion(x: Float, y: Float) = {
+    val pot = new Potion(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("potion_red"), Animation.LOOP_PINGPONG)), this)
+    pot.setPosition(x, y)
+    collectablesSet.add(pot)
+    stage.addActor(pot)
+  }
+  
   def createSoulShard(x: Float, y: Float) = {
     val ss = new SoulShard(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("soul"), Animation.LOOP_PINGPONG)), this)
     ss.setPosition(x, y)
