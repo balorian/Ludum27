@@ -7,16 +7,17 @@ import scala.collection.mutable.Stack
 import scala.collection.mutable.HashSet
 import com.car.l.Assets.assets
 import scala.math.random
+import scala.util.Random
 
 object EnemyPool {
   var freeEnemies: Stack[Enemy] = new Stack[Enemy]()
+  val random = new Random
 
   def getEnemy(screen: LevelTestScreen, enemyType: Symbol): Enemy = {
     if (freeEnemies.isEmpty) {
       new Enemy(Map("skeleton" -> new Animation(0.20f, assets.creatureAtlas.createSprites("skeleton"), Animation.LOOP),
-                    "ghost" -> new Animation(0.20f, assets.creatureAtlas.createSprites("ghost"), Animation.LOOP)), screen, enemyType)
-    }
-    else {
+        "ghost" -> new Animation(0.20f, assets.creatureAtlas.createSprites("ghost"), Animation.LOOP)), screen, enemyType)
+    } else {
       val ret = freeEnemies.pop()
       ret.setVisible(true)
       ret.enemyType = enemyType
@@ -36,6 +37,11 @@ object EnemyPool {
     set.remove(enemy)
     freeEnemies.push(enemy)
   }
+
+  def drop(screen: LevelTestScreen, x: Float, y: Float) {
+    if (random.nextFloat <= 0.03) { screen.createPotion(x, y) }
+    else screen.createSoulShard(x, y)
+  }
 }
 
 class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var enemyType: Symbol) extends Entity(animations, 48, 7) {
@@ -46,22 +52,22 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
   screen.enemySet.add(this)
   screen.stage.addActor(this)
 
-  def setType(enemyType: Symbol){
-	enemyType match{
-	  case 'skeleton => swapAnimation("skeleton")
-	  case 'ghost => swapAnimation("ghost")
-	}
-    speed = if(enemyType == 'skeleton) 2.5f else 1.5f
-    damage = if(enemyType == 'skeleton) 4 else 9
-    health = if(enemyType == 'skeleton) 7 else 14
+  def setType(enemyType: Symbol) {
+    enemyType match {
+      case 'skeleton => swapAnimation("skeleton")
+      case 'ghost => swapAnimation("ghost")
+    }
+    speed = if (enemyType == 'skeleton) 2.5f else 1.5f
+    damage = if (enemyType == 'skeleton) 4 else 9
+    health = if (enemyType == 'skeleton) 7 else 14
   }
-  
+
   override def act(delta: Float) {
     super.act(delta)
     if (health <= 0) {
-      screen.createSoulShard(getX, getY)
+      EnemyPool.drop(screen, getX(), getY())
       EnemyPool.returnEnemy(screen.enemySet, this)
-      if(enemyType == 'skeleton)
+      if (enemyType == 'skeleton)
         screen.player.score += 10
       else
         screen.player.score += 20
@@ -73,7 +79,7 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
     deltaV.nor.scl(speed)
     scan(0.5f, new Vector2(deltaV.x, 0).nor, deltaV.len)
     scan(0.5f, new Vector2(0, deltaV.y).nor, deltaV.len)
-    
+
     setRotation(deltaV.angle() + 270)
   }
 

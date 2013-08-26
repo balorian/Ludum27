@@ -58,6 +58,8 @@ class Assets {
     manager.load("sounds/death.wav", classOf[Sound])
     manager.load("sounds/throw.wav", classOf[Sound])
     manager.load("sounds/big_pickup.wav", classOf[Sound])
+    manager.load("sounds/potion.wav", classOf[Sound])
+    manager.load("sounds/explosion.wav", classOf[Sound])
   }
 
   def playSound(key: String) {

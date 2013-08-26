@@ -62,6 +62,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
   var score = 0
   var keys = 0
+  var potions = 0
 
   setPosition(4 * 48, 4 * 48)
 

@@ -55,7 +55,7 @@ object LevelLoader {
     }
 
     def createKey(x: Int, y: Int): Key = {
-      val key = new Key(Map("idle" -> new Animation(0.10f, assets.creatureAtlas.createSprites("key"), Animation.LOOP)), screen)
+      val key = new Key(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("key"), Animation.LOOP_PINGPONG)), screen)
       key.setPosition(x, y)
       key
     }

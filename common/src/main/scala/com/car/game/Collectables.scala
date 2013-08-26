@@ -32,11 +32,15 @@ abstract class Collectable(
 }
 
 class Key(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "key") {
-  override def pickup(player: Player) = {player.keys += 1; player.score += 100}
+  override def pickup(player: Player) = { player.keys += 1; player.score += 100 }
+}
+
+class Potion(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "potion") {
+  override def pickup(player: Player) = { player.potions += 1; player.score += 100 }
 }
 
 class SoulShard(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 24, 2, screen, screen.collectablesSet, "soul") {
-  override def pickup(player: Player) = {player.modSpirit(1f); player.score += 10}
+  override def pickup(player: Player) = { player.modSpirit(1f); player.score += 10 }
 
   val speed = 5f
 
@@ -58,7 +62,7 @@ class Treasure(animations: Map[String, Animation], screen: LevelTestScreen) exte
 }
 
 class Meat(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "meat") {
-  override def pickup(player: Player) = {player.modHealth(10); player.score += 50}
+  override def pickup(player: Player) = { player.modHealth(10); player.score += 50 }
 }
 
 class Door(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 0, screen, screen.doorSet, "door") {

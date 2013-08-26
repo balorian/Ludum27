@@ -30,6 +30,7 @@ import com.car.game.Enemy
 import scala.collection.mutable.HashSet
 import com.car.game.BreakBlock
 import com.car.game.EnemyPool
+import com.car.game.Potion
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
@@ -120,6 +121,13 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
         }
       }
     }
+  }
+
+  def createPotion(x: Float, y: Float) = {
+    val pot = new Potion(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("potion"), Animation.LOOP_PINGPONG)), this)
+    pot.setPosition(x, y)
+    collectablesSet.add(pot)
+    stage.addActor(pot)
   }
 
   def createSoulShard(x: Float, y: Float) = {
