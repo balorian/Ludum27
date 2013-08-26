@@ -28,7 +28,7 @@ object LevelLoader {
   
   var cid = 0
 
-  val levels = List("test1", "level1")
+  val levels = List("level0", "level1", "level2")
   def nextLevelFrom(current: String): String = {
     levels.takeRight(levels.length - 1 - levels.indexOf(current)).head
   }
