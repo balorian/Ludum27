@@ -11,6 +11,8 @@ import com.car.game.SpawnPoint
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.car.game.Key
 import com.car.game.Door
+import com.car.game.BreakBlock
+import com.car.game.BreakBlock
 
 object LevelLoader {
   val LOG_TAG = "LevelLoader"
@@ -53,11 +55,17 @@ object LevelLoader {
       key
     }
     
+    def createBlock(x: Int, y: Int): BreakBlock = {
+      val block = new BreakBlock(screen, 14)
+      block.setPosition(x, y)
+      block
+    }
+    
     def spawnKey(i: Int, j: Int) = screen.collectablesSet.add(createKey(i, j))
-    def spawnDoor(i: Int, j: Int) = screen.blocksSet.add(createDoor(i, j))
+    def spawnDoor(i: Int, j: Int) = screen.doorSet.add(createDoor(i, j))
     def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn1(i, j))
     def spawnPoint2(i: Int, j: Int) = screen.spawnSet.add(createSpawn2(i, j))
-    def spawnBreakable(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Breakable at " + i + "/" + j)
+    def spawnBreakable(i: Int, j: Int) = screen.blockSet.add(createBlock(i, j))
 
     val levelData = new Pixmap(Gdx.files.classpath(MAPS_DIR + key + MAP_SUFFIX));
     val width = levelData.getWidth()

@@ -28,6 +28,7 @@ import scala.util.Random
 import com.car.game.Meat
 import com.car.game.Enemy
 import scala.collection.mutable.HashSet
+import com.car.game.BreakBlock
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
@@ -42,14 +43,16 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val bg = Assets.assets.tileAtlas.createSprite("bg")
 
   val collectablesSet: HashSet[Entity] = HashSet.empty
-  val blocksSet: HashSet[Entity] = HashSet.empty
+  val doorSet: HashSet[Entity] = HashSet.empty
+  val blockSet: HashSet[BreakBlock] = HashSet.empty
   val spawnSet: HashSet[SpawnPoint] = HashSet.empty
 
   def setLevel(key: String) {
     def clearLists() {
       spawnSet.clear
       collectablesSet.clear
-      blocksSet.clear
+      doorSet.clear
+      blockSet.clear
     }
 
     level = Some(LevelLoader.load(key, this))
@@ -58,8 +61,9 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.addActor(bgImage)
     stage.addActor(level.get)
     spawnSet foreach (stage.addActor(_))
+    blockSet foreach (stage.addActor(_))
     collectablesSet foreach (stage.addActor(_))
-    blocksSet foreach (stage.addActor(_))
+    doorSet foreach (stage.addActor(_))
     stage.addActor(player)
   }
 
@@ -103,7 +107,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     Gdx.app.debug(LOG_TAG, "Spawn on " + point.getX() + ", " + point.getY())
   }
 
-  def createSouldShard(x: Float, y: Float) = {
+  def createSoulShard(x: Float, y: Float) = {
     val ss = new SoulShard(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("soul_shard"), Animation.LOOP)), this)
     ss.setPosition(x, y)
     collectablesSet.add(ss)
@@ -119,7 +123,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
 
   def collidesWithBlock(player: Player): Boolean = {
     var r = false
-    blocksSet foreach (block => if (block.collidesWith(player)) {r = true; block.collidedWith(player)} )
+    doorSet foreach (block => if (block.collidesWith(player)) {r = true; block.collidedWith(player)} )
     r
   }
 }

@@ -40,7 +40,7 @@ class Meat(animations: Map[String, Animation], screen: LevelTestScreen) extends 
   override def pickup(player: Player) = player.currentHealth = MathUtils.clamp(player.currentHealth + 10, 0, player.maxHealth)
 }
 
-class Door(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 0, screen, screen.blocksSet, "door") {
+class Door(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 0, screen, screen.doorSet, "door") {
   override def pickupWithSound(player: Player) {
     if (player.keys > 0) { player.keys -= 1; super.pickupWithSound(player) }
     collisionPartner = None
