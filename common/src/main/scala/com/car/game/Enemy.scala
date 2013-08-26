@@ -56,6 +56,7 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
     super.act(delta)
     if (health <= 0) {
       EnemyPool.returnEnemy(screen.enemySet, this)
+      screen.createSoulShard(getX, getY)
     }
 
     val pc = screen.player.getCenter

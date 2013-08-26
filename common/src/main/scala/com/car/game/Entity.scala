@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 
 abstract class Entity(animations: Map[String, Animation], entitySize: Int, boxOffset: Int) extends Actor {
+  val entitySize_f = entitySize.toFloat
+  
   var currentAnimation: String = "idle"
   var animationTimer: Float = 0
   var collisionPartner: Option[Entity] = None
@@ -38,7 +40,7 @@ abstract class Entity(animations: Map[String, Animation], entitySize: Int, boxOf
   }
   
   def updateBoundingBox() = boundingBox.setPosition(getX+boxOffset, getY+boxOffset)
-  def getCenter() = (getX+entitySize/2, getY+entitySize/2)
+  def getCenter() = (getX+entitySize_f/2, getY+entitySize_f/2)
   
   def contains(x: Float, y: Float) = boundingBox.contains(x, y)
   def collidesWith(that: Entity) = boundingBox.overlaps(that.boundingBox)
@@ -80,4 +82,6 @@ abstract class Entity(animations: Map[String, Animation], entitySize: Int, boxOf
     batch.draw(region.getTexture, getX, getY, entitySize/2, entitySize/2, entitySize, entitySize, 1, 1,
     		 	getRotation, region.getRegionX, region.getRegionY, entitySize, entitySize, false, false)
   }
+  
+  def center: Vector2 = new Vector2(getWidth() / 2 + getX(), getHeight() / 2 + getY())
 }
