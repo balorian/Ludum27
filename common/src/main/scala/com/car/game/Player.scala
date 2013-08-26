@@ -61,6 +61,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
   var shootCooldown = 0f
   
   var superSayan = false
+  var powerTimer = 0f
   
   val maxHealth = 100
   var currentHealth = maxHealth
@@ -118,7 +119,8 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     }
 
     shootCooldown += delta
-
+    powerTimer += delta
+    
     super.act(delta)
 
     modSpirit(-delta)
@@ -152,7 +154,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     def spawnShot(dir: Int) {
       swapAnimation("throw")
       assets.playSound("throw")
-      val shot = ShotPool.getShot(screen)
+      val shot = ShotPool.getShot(screen, (powerTimer < 25))
       var shotV: Vector2 = new Vector2(0, 0)
       if ((1 & shootDir) > 0) shotV.add(0, 1)
       if ((2 & shootDir) > 0) shotV.add(1, 0)
@@ -197,5 +199,4 @@ class Fader(var screen: LevelTestScreen) extends Actor {
     batch.draw(whiteTex, 0, 0, screen.player.getX + 400, screen.player.getY + 400)
     batch.setColor(Color.WHITE)
   }
-  
 }

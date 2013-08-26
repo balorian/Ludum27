@@ -52,7 +52,7 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
   var speed: Float = 0
   var damage: Int = 0
   var health: Int = 0
-  var shotTimer: Float = 5f
+  var shotTimer: Float = 10f
   setType(enemyType)
   screen.enemySet.add(this)
   screen.stage.addActor(this)
@@ -64,9 +64,9 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
       case 'ghost => swapAnimation("ghost")
     }
     speed = if (enemyType == 'skeleton) 2.5f else if (enemyType == 'zombie) 1.5f else 2f
-    damage = if (enemyType == 'skeleton) 4 else if (enemyType == 'zombie) 9 else 15
-    health = if (enemyType == 'skeleton) 7 else if (enemyType == 'zombie) 14 else 20 
-    shotTimer = 5f - random.toFloat * 3
+    damage = if (enemyType == 'skeleton) 9 else if (enemyType == 'zombie) 6 else 14
+    health = if (enemyType == 'skeleton) 7 else if (enemyType == 'zombie) 14 else 9 
+    shotTimer = 10f - random.toFloat * 5
   }
 
   override def act(delta: Float) {
@@ -102,7 +102,7 @@ class Enemy(animations: Map[String, Animation], var screen: LevelTestScreen, var
       
       if(shotTimer < 0){
         spawnShot()
-        shotTimer = 5f - random.toFloat * 3
+        shotTimer = 10f - random.toFloat * 5
       }
     }
   }
@@ -138,7 +138,7 @@ object GhostShotPool{
 }
 
 class GhostShot(screen: LevelTestScreen, image: TextureRegion) extends Actor{
-  val damage = 7
+  val damage = 5
   var deltaV = new Vector2(0, 0)
   var spinCounter = 0
   screen.stage.addActor(this)

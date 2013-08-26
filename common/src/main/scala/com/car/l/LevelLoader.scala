@@ -16,6 +16,7 @@ import com.car.game.BreakBlock
 import com.car.game.Treasure
 import com.car.game.Meat
 import com.car.game.Potion
+import com.car.game.PowerPotion
 
 object LevelLoader {
   val LOG_TAG = "LevelLoader"
@@ -32,6 +33,7 @@ object LevelLoader {
   val TREASURE = 0x0026FFFF
   val MEAT = 0xFFBFECFF
   val POTION = 0xFF6A00FF
+  val POWER_POTION = 0x7F3300FF
 
   val levels = List("level0", "level1", "level2", "level3", "level4", "level5")
   
@@ -103,6 +105,12 @@ object LevelLoader {
       potion
     }
     
+    def createPowerPotion(x: Int, y: Int): PowerPotion = {
+      val potion = new PowerPotion(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprite("potion_red"))), screen)
+      potion.setPosition(x, y)
+      potion
+    }
+    
     def spawnKey(i: Int, j: Int) = screen.collectablesSet.add(createKey(i, j))
     def spawnTreasure(i: Int, j: Int) = screen.collectablesSet.add(createTreasure(i, j))
     def spawnDoor(i: Int, j: Int) = screen.doorSet.add(createDoor(i, j))
@@ -112,6 +120,7 @@ object LevelLoader {
     def spawnBreakable(i: Int, j: Int) = screen.blockSet.add(createBlock(i, j))
     def spawnMeat(i: Int, j: Int) = screen.collectablesSet.add(createMeat(i, j))
     def spawnPotion(i: Int, j: Int) = screen.collectablesSet.add(createPotion(i, j))
+    def spawnPowerPotion(i: Int, j: Int) = screen.collectablesSet.add(createPowerPotion(i, j))
 
     val levelData = new Pixmap(Gdx.files.classpath(MAPS_DIR + key + MAP_SUFFIX));
     val width = levelData.getWidth()
@@ -148,6 +157,8 @@ object LevelLoader {
           tilemap(index) = Tile.GROUND; spawnMeat(x, y)
         case POTION =>
           tilemap(index) = Tile.GROUND; spawnPotion(x, y)
+        case POWER_POTION =>
+          tilemap(index) = Tile.GROUND; spawnPowerPotion(x, y)
         case Tile.STAIRS_UP =>
           tilemap(index) = pixel; sc = (x, y)
         case _ => tilemap(index) = pixel

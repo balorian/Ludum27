@@ -39,6 +39,10 @@ class Potion(animations: Map[String, Animation], screen: LevelTestScreen) extend
   override def pickup(player: Player) = { player.potions += 1; player.score += 100 }
 }
 
+class PowerPotion(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 48, 5, screen, screen.collectablesSet, "potion") {
+  override def pickup(player: Player) = { player.powerTimer = 0}
+}
+
 class SoulShard(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 24, 2, screen, screen.collectablesSet, "soul") {
   override def pickup(player: Player) = { player.modSpirit(1f); player.score += 10 }
 
