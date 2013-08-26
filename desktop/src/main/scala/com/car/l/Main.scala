@@ -10,6 +10,7 @@ object Main {
     cfg.width = 640
     cfg.useGL20 = true
     cfg.forceExit = false
+    cfg.resizable = false
     new LwjglApplication(new LudumGame(), cfg)
   }
 }

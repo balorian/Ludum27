@@ -7,10 +7,12 @@ import scala.util.Random
 object SpawnPoint {
   val SPAWN_TIME = 3f
   val random = new Random
+
+  def generateNext() = { if (random.nextBoolean()) (SPAWN_TIME + random.nextFloat) else { SPAWN_TIME - random.nextFloat } }
 }
 
 class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen, val maxHealth: Int, val enemyType: Symbol) extends Entity(animations, 48, 0) {
-  var stateTime: Float = 0
+  var stateTime: Float = SpawnPoint.generateNext
   var health = maxHealth
 
   override def act(delta: Float) {
@@ -18,9 +20,9 @@ class SpawnPoint(animations: Map[String, Animation], var screen: LevelTestScreen
       this.currentAnimation = "damaged"
     }
 
-    stateTime += delta
-    if (stateTime >= SpawnPoint.SPAWN_TIME) {
-      stateTime = 0
+    stateTime -= delta
+    if (stateTime < 0) {
+      stateTime = SpawnPoint.generateNext
       screen.spawnOnPoint(this)
     }
     if (health <= 0) {

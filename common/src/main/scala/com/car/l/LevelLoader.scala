@@ -28,7 +28,7 @@ object LevelLoader {
   val BREAKABLE_WALL = 0xD67FFFFF
   val TREASURE = 0x0026FFFF
 
-  val levels = List("level0", "level1", "level2")
+  val levels = List("level0", "level1", "level2", "level3")
   def nextLevelFrom(current: String): String = {
     levels.takeRight(levels.length - 1 - levels.indexOf(current)).head
   }
