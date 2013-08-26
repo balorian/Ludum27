@@ -21,7 +21,6 @@ class Assets {
 
   lazy val hit = manager.get("sounds/hit.wav", classOf[Sound])
   lazy val hurt = manager.get("sounds/hurt.wav", classOf[Sound])
-  lazy val pickup = manager.get("sounds/pickup.wav", classOf[Sound])
 
   val font: BitmapFont = new BitmapFont(Gdx.files.classpath("images/ronda32_bold.fnt"), false)
 
@@ -40,7 +39,13 @@ class Assets {
 
     manager.load("sounds/hit.wav", classOf[Sound])
     manager.load("sounds/hurt.wav", classOf[Sound])
-    manager.load("sounds/pickup.wav", classOf[Sound])
+    manager.load("sounds/key.wav", classOf[Sound])
+    manager.load("sounds/meat.wav", classOf[Sound])
+    manager.load("sounds/soul.wav", classOf[Sound])
+    manager.load("sounds/door.wav", classOf[Sound])
+  }
 
+  def playSound(key: String) {
+    manager.get("sounds/" + key + ".wav", classOf[Sound]).play()
   }
 }

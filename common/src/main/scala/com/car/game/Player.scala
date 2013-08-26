@@ -86,7 +86,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
         val oldPos = (getX, getY)
         val scl = dir.scl(step)
         setPosition(scl.x + getX, scl.y + getY)
-        if (screen.level.get.collidesWith(boundingBox, Tile.WALL) || screen.level.get.collidesWith(boundingBox, Tile.WATER))
+        if (screen.level.get.collidesWith(boundingBox, Tile.WALL) || screen.level.get.collidesWith(boundingBox, Tile.WATER) || screen.collidesWithBlock(this))
           setPosition(oldPos._1, oldPos._2)
         else if (newLength < step)
           scan(newLength, oldDir, 0)

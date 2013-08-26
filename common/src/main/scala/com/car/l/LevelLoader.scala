@@ -10,6 +10,7 @@ import com.car.l.screens.LevelTestScreen
 import com.car.game.SpawnPoint
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.car.game.Key
+import com.car.game.Door
 
 object LevelLoader {
   val LOG_TAG = "LevelLoader"
@@ -41,13 +42,19 @@ object LevelLoader {
     }
 
     def createKey(x: Int, y: Int): Key = {
-      val key = new Key(Map("idle" -> new Animation(0.10f, assets.creatureAtlas.createSprites("key"), Animation.LOOP)))
+      val key = new Key(Map("idle" -> new Animation(0.10f, assets.creatureAtlas.createSprites("key"), Animation.LOOP)), screen)
       key.setPosition(x, y)
       key
     }
 
-    def spawnKey(i: Int, j: Int) = screen.collectablesList.append(createKey(i, j))
-    def spawnDoor(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Door at " + i + "/" + j)
+    def createDoor(x: Int, y: Int): Door = {
+      val key = new Door(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("door"), Animation.LOOP)), screen)
+      key.setPosition(x, y)
+      key
+    }
+    
+    def spawnKey(i: Int, j: Int) = screen.collectablesSet.add(createKey(i, j))
+    def spawnDoor(i: Int, j: Int) = screen.blocksSet.add(createDoor(i, j))
     def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn1(i, j))
     def spawnPoint2(i: Int, j: Int) = screen.spawnSet.add(createSpawn2(i, j))
     def spawnBreakable(i: Int, j: Int) = Gdx.app.debug(LOG_TAG, "Breakable at " + i + "/" + j)

@@ -41,13 +41,15 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   lazy val bgImage = new Image(sprite)
   val bg = Assets.assets.tileAtlas.createSprite("bg")
 
-  val collectablesList: ListBuffer[Entity] = new ListBuffer
+  val collectablesSet: HashSet[Entity] = HashSet.empty
+  val blocksSet: HashSet[Entity] = HashSet.empty
   val spawnSet: HashSet[SpawnPoint] = HashSet.empty
 
   def setLevel(key: String) {
     def clearLists() {
       spawnSet.clear
-      collectablesList.dropRight(0)
+      collectablesSet.clear
+      blocksSet.clear
     }
 
     level = Some(LevelLoader.load(key, this))
@@ -56,7 +58,8 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.addActor(bgImage)
     stage.addActor(level.get)
     spawnSet foreach (stage.addActor(_))
-    collectablesList foreach (stage.addActor(_))
+    collectablesSet foreach (stage.addActor(_))
+    blocksSet foreach (stage.addActor(_))
     stage.addActor(player)
   }
 
@@ -80,7 +83,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     stage.act()
     cameraControl()
     stage.draw()
-    
+
     ui.update
     ui.render(delta)
 
@@ -101,16 +104,22 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   }
 
   def createSouldShard(x: Float, y: Float) = {
-    val ss = new SoulShard(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("soul_shard"), Animation.LOOP)))
+    val ss = new SoulShard(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("soul_shard"), Animation.LOOP)), this)
     ss.setPosition(x, y)
-    collectablesList.append(ss)
+    collectablesSet.add(ss)
     stage.addActor(ss)
   }
 
   def createMeat(x: Float, y: Float) = {
-    val meat = new Meat(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("meat"), Animation.LOOP)))
+    val meat = new Meat(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("meat"), Animation.LOOP)), this)
     meat.setPosition(x, y)
-    collectablesList.append(meat)
+    collectablesSet.add(meat)
     stage.addActor(meat)
+  }
+
+  def collidesWithBlock(player: Player): Boolean = {
+    var r = false
+    blocksSet foreach (block => if (block.collidesWith(player)) {r = true; block.collidedWith(player)} )
+    r
   }
 }

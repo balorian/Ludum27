@@ -9,6 +9,8 @@ import com.badlogic.gdx.math.Rectangle
 abstract class Entity(animations: Map[String, Animation], entitySize: Int, boxOffset: Int) extends Actor {
   var currentAnimation: String = "idle"
   var animationTimer: Float = 0
+  var collisionPartner: Option[Entity] = None
+  
   val boundingBox = new Rectangle(boxOffset, boxOffset, entitySize-2*boxOffset, entitySize-2*boxOffset)
   
   override def hit(x: Float, y: Float, touchable: Boolean): Actor =
@@ -36,6 +38,7 @@ abstract class Entity(animations: Map[String, Animation], entitySize: Int, boxOf
   
   def contains(x: Float, y: Float) = boundingBox.contains(x, y)
   def collidesWith(that: Entity) = boundingBox.overlaps(that.boundingBox)
+  def collidedWith(that: Entity) = collisionPartner = Some(that)
   
   override def draw(batch: SpriteBatch, parentAlpha: Float) = {
     //batch.draw(animations(currentAnimation).getKeyFrame(animationTimer), getX, getY)
