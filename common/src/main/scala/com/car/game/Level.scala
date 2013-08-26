@@ -15,8 +15,9 @@ object Tile {
   val STAIRS_DOWN = 0xFF0000FF
   val STAIRS_UP = 0xFF00E1FF
   val EMPTY = 0x0000000
+  val PEDESTAL = 0xCCCCCCFF
 
-  val types = Map(GROUND -> "ground", WALL -> "wall", WATER -> "water", STAIRS_DOWN -> "stairs_down", STAIRS_UP -> "stairs_up")
+  val types = Map(GROUND -> "ground", WALL -> "wall", WATER -> "water", STAIRS_DOWN -> "stairs_down", STAIRS_UP -> "stairs_up", PEDESTAL -> "pedestal")
 }
 
 class Level(val mapWidth: Int, val mapHeight: Int, tileMap: Array[Int], val startCoord: (Float, Float), val name:String) extends Actor {

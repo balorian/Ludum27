@@ -17,6 +17,8 @@ import com.car.game.Treasure
 import com.car.game.Meat
 import com.car.game.Potion
 import com.car.game.PowerPotion
+import com.car.game.PowerPotion
+
 
 object LevelLoader {
   val LOG_TAG = "LevelLoader"
@@ -81,6 +83,12 @@ object LevelLoader {
       t
     }
 
+    def createSayanOrb(x: Int, y: Int): SayanOrb = {
+      val t = new SayanOrb(Map("idle" -> new Animation(0.2f, assets.creatureAtlas.createSprites("soul_orb"), Animation.LOOP_PINGPONG)), screen)
+      t.setPosition(x - 8, y + 16)
+      t
+    }
+    
     def createDoor(x: Int, y: Int): Door = {
       val key = new Door(Map("idle" -> new Animation(10f, assets.creatureAtlas.createSprites("door"), Animation.LOOP)), screen)
       key.setPosition(x, y)
@@ -113,6 +121,7 @@ object LevelLoader {
     
     def spawnKey(i: Int, j: Int) = screen.collectablesSet.add(createKey(i, j))
     def spawnTreasure(i: Int, j: Int) = screen.collectablesSet.add(createTreasure(i, j))
+    def spawnSayanOrb(i: Int, j: Int) = screen.collectablesSet.add(createSayanOrb(i, j))
     def spawnDoor(i: Int, j: Int) = screen.doorSet.add(createDoor(i, j))
     def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn1(i, j))
     def spawnPoint2(i: Int, j: Int) = screen.spawnSet.add(createSpawn2(i, j))
@@ -161,6 +170,8 @@ object LevelLoader {
           tilemap(index) = Tile.GROUND; spawnPowerPotion(x, y)
         case Tile.STAIRS_UP =>
           tilemap(index) = pixel; sc = (x, y)
+        case Tile.PEDESTAL =>
+          tilemap(index) = pixel; spawnSayanOrb(x,y)
         case _ => tilemap(index) = pixel
       }
     }

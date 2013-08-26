@@ -77,6 +77,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
   def modSpirit(delta: Float) {
     currentSpirit = MathUtils.clamp(currentSpirit + delta, 0, maxSpirit)
+    if(superSayan){currentSpirit = 1f}
   }
 
   def modHealth(delta: Int) {

@@ -6,6 +6,7 @@ import com.car.l.Assets
 import com.badlogic.gdx.math.MathUtils
 import scala.collection.mutable.HashSet
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
 abstract class Collectable(
   animations: Map[String, Animation],
@@ -76,3 +77,6 @@ class Door(animations: Map[String, Animation], screen: LevelTestScreen) extends 
   }
 }
 
+class SayanOrb(animations: Map[String, Animation], screen: LevelTestScreen) extends Collectable(animations, 64, 20, screen, screen.collectablesSet, "soul_orb") {
+  override def pickup(player: Player) = player.superSayan = true
+}
