@@ -14,6 +14,8 @@ import com.car.game.Door
 import com.car.game.BreakBlock
 import com.car.game.BreakBlock
 import com.car.game.Treasure
+import com.car.game.Meat
+import com.car.game.Potion
 
 object LevelLoader {
   val LOG_TAG = "LevelLoader"
@@ -27,8 +29,10 @@ object LevelLoader {
   val SPAWN_2 = 0x287D00FF
   val BREAKABLE_WALL = 0xD67FFFFF
   val TREASURE = 0x0026FFFF
+  val MEAT = 0xFFBFECFF
+  val POTION = 0xFF6A00FF
 
-  val levels = List("level0", "level1", "level2", "level3")
+  val levels = List("level0", "level1", "level2", "level3", "level5")
   
   var depth = 1
   
@@ -78,12 +82,26 @@ object LevelLoader {
       block
     }
 
+    def createMeat(x: Int, y: Int): Meat = {
+      val meat = new Meat(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprite("meat"))), screen)
+      meat.setPosition(x, y)
+      meat
+    }
+    
+    def createPotion(x: Int, y: Int): Potion = {
+      val potion = new Potion(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprite("potion"))), screen)
+      potion.setPosition(x, y)
+      potion
+    }
+    
     def spawnKey(i: Int, j: Int) = screen.collectablesSet.add(createKey(i, j))
     def spawnTreasure(i: Int, j: Int) = screen.collectablesSet.add(createTreasure(i, j))
     def spawnDoor(i: Int, j: Int) = screen.doorSet.add(createDoor(i, j))
     def spawnPoint1(i: Int, j: Int) = screen.spawnSet.add(createSpawn1(i, j))
     def spawnPoint2(i: Int, j: Int) = screen.spawnSet.add(createSpawn2(i, j))
     def spawnBreakable(i: Int, j: Int) = screen.blockSet.add(createBlock(i, j))
+    def spawnMeat(i: Int, j: Int) = screen.collectablesSet.add(createMeat(i, j))
+    def spawnPotion(i: Int, j: Int) = screen.collectablesSet.add(createPotion(i, j))
 
     val levelData = new Pixmap(Gdx.files.classpath(MAPS_DIR + key + MAP_SUFFIX));
     val width = levelData.getWidth()
@@ -114,6 +132,10 @@ object LevelLoader {
           tilemap(index) = Tile.GROUND; spawnBreakable(x, y)
         case TREASURE =>
           tilemap(index) = Tile.GROUND; spawnTreasure(x, y)
+        case MEAT =>
+          tilemap(index) = Tile.GROUND; spawnMeat(x, y)
+        case POTION =>
+          tilemap(index) = Tile.GROUND; spawnPotion(x, y)
         case Tile.STAIRS_UP =>
           tilemap(index) = pixel; sc = (x, y)
         case _ => tilemap(index) = pixel
