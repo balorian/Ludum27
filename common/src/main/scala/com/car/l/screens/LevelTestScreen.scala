@@ -56,6 +56,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
     }
 
     level = Some(LevelLoader.load(key, this))
+    player.setPosition(level.get.startCoord._1, level.get.startCoord._2)
 
     stage.clear()
     stage.addActor(bgImage)

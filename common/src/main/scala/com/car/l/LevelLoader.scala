@@ -54,7 +54,7 @@ object LevelLoader {
       key.setPosition(x, y)
       key
     }
-    
+
     def createBlock(x: Int, y: Int): BreakBlock = {
       val block = new BreakBlock(screen, 14)
       block.setPosition(x, y)
@@ -71,6 +71,8 @@ object LevelLoader {
     val width = levelData.getWidth()
     val height = levelData.getHeight()
     val tilemap = new Array[Int](width * height)
+
+    var sc: (Float, Float) = (0, 0)
 
     for (j <- 0 until height; i <- 0 until width) {
       val pixel = levelData.getPixel(i, j)
@@ -92,11 +94,13 @@ object LevelLoader {
           tilemap(index) = Tile.GROUND; spawnPoint2(x, y)
         case BREAKABLE_WALL =>
           tilemap(index) = Tile.GROUND; spawnBreakable(x, y)
+        case Tile.STAIRS_DOWN =>
+          tilemap(index) = pixel; sc = (x, y)
         case _ => tilemap(index) = pixel
       }
     }
 
-    new Level(width, height, tilemap)
+    new Level(width, height, tilemap, sc)
   }
 }
 
