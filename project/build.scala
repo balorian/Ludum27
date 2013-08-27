@@ -10,7 +10,7 @@ object Settings {
   lazy val scalameter = new TestFramework("org.scalameter.ScalaMeterFramework")
 
   lazy val common = Defaults.defaultSettings ++ Seq (
-    version := "0.1",
+    version := "1.0",
     scalaVersion := "2.10.2",
     resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
     libraryDependencies += "org.scalatest" %% "scalatest" % "1.9.1" % "test",
@@ -27,7 +27,7 @@ object Settings {
   lazy val android = Settings.common ++
     AndroidProject.androidSettings ++
     AndroidMarketPublish.settings ++ Seq (
-      name := "ludum",
+      name := "SoulReaver",
       platformName in Android := "android-17",
       keyalias in Android := "change-me",
       mainAssetsPath in Android := file("common/assets"),
@@ -106,7 +106,7 @@ object LibgdxBuild extends Build {
     settings = Settings.desktop
   ) dependsOn(common % "compile->compile;test->test") settings(
     mainClass in assembly := Some("com.car.l.Main"),
-    AssemblyKeys.jarName in assembly := "ludum-0.1.jar"
+    AssemblyKeys.jarName in assembly := "SoulReaver-1.0.jar"
   )
 
   lazy val android = Project (
