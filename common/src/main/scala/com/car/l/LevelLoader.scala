@@ -38,7 +38,7 @@ object LevelLoader {
   val POTION = 0xFF6A00FF
   val POWER_POTION = 0x7F3300FF
 
-  val levels = List("level0", "level1", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "level9", "level10", "level11", "level12")
+  val levels = List("level0", "level1", "level10", "level2", "level3", "level4", "level5", "level6", "level7", "level8", "level9", "level11", "level12")
   
   var depth = 1
   

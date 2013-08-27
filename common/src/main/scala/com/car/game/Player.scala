@@ -28,7 +28,6 @@ class PlayerProcessor(player: Player) extends InputProcessor {
     if (moveKeys.contains(keycode)) player.movement(moveKeys(keycode)) = true
     if (shootKeys.contains(keycode)) {
       player.shootDir += shootKeys(keycode)
-
     }
     true
   }
@@ -37,6 +36,8 @@ class PlayerProcessor(player: Player) extends InputProcessor {
     if (moveKeys.contains(keycode)) player.movement(moveKeys(keycode)) = false
     if (shootKeys.contains(keycode)) {
       player.shootDir -= shootKeys(keycode)
+      if(player.shootDir < 0)
+        player.shootDir = 0
     }
     if (Keys.SPACE == keycode) {
       player.usePotion
@@ -113,7 +114,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
 
   def usePotion() {
     if (potions > 0) {
-      screen.enemySet.foreach(enemy => if (scala.math.max(getX - enemy.getX, getY - enemy.getY) < 300) enemy.health -= 10)
+      screen.enemySet.foreach(enemy => if (scala.math.max(getX - enemy.getX, getY - enemy.getY) < 250) enemy.health -= 10)
       screen.stage.addActor(new Fader(screen))
       assets.playSound("explosion")
       potions -= 1
@@ -133,6 +134,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
     super.act(delta)
 
     modSpirit(-delta)
+    println(shootDir)
 
     var deltaV = new Vector2(0, 0)
     if (movement(0)) { deltaV.add(0, 1); setRotation(0) }
@@ -167,7 +169,6 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
       swapAnimation("throw")
       assets.playSound("throw")
       val shot = ShotPool.getShot(screen, (powerTimer < 25))
-      println(powerTimer)
       var shotV: Vector2 = new Vector2(0, 0)
       if ((1 & shootDir) > 0) shotV.add(0, 1)
       if ((2 & shootDir) > 0) shotV.add(1, 0)
