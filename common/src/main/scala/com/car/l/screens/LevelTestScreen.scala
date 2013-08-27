@@ -35,6 +35,7 @@ import com.badlogic.gdx.graphics.Pixmap
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.actions.Actions._
+import com.car.game.PowerPotion
 
 class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   val LOG_TAG = "LevelTestScreen"
@@ -139,7 +140,7 @@ class LevelTestScreen(game: LudumGame) extends AbstractScreen(game: LudumGame) {
   }
 
   def createPowerPotion(x: Float, y: Float) = {
-    val pot = new Potion(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("potion_red"), Animation.LOOP_PINGPONG)), this)
+    val pot = new PowerPotion(Map("idle" -> new Animation(0.20f, assets.creatureAtlas.createSprites("potion_red"), Animation.LOOP_PINGPONG)), this)
     pot.setPosition(x, y)
     collectablesSet.add(pot)
     stage.addActor(pot)

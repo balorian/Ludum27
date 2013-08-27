@@ -33,7 +33,7 @@ class LevelEndScreen(game: LudumGame, screen: LevelTestScreen) extends AbstractS
   labelStory.setWrap(true)
 
   stage.addActor(label)
-  stage.addActor(labelStory)
+  //stage.addActor(labelStory)
 
   def reset() {
     stage.addAction(sequence(delay(1.5f), run(new Runnable {

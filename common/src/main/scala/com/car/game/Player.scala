@@ -167,6 +167,7 @@ class Player(animations: Map[String, Animation], var screen: LevelTestScreen) ex
       swapAnimation("throw")
       assets.playSound("throw")
       val shot = ShotPool.getShot(screen, (powerTimer < 25))
+      println(powerTimer)
       var shotV: Vector2 = new Vector2(0, 0)
       if ((1 & shootDir) > 0) shotV.add(0, 1)
       if ((2 & shootDir) > 0) shotV.add(1, 0)
